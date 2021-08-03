@@ -25,6 +25,5 @@ export default {
     output: {
         sourcemap: true,
         dir: "dist",
-    },
-    preserveEntrySignatures: "strict",
+    }
 };

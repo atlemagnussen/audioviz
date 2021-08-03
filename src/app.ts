@@ -33,6 +33,9 @@ export class MainAppComponent extends LitElement {
 		    justify-content: center;
 		    z-index: 500;
 	    }
+        stream-viz-poc {
+            height: 100%;
+        }
     `
     //protected createRenderRoot() {
     //    return this
