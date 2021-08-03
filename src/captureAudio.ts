@@ -23,10 +23,18 @@ export const captureAudio = async (canv: HTMLCanvasElement) => {
     }
     
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-            audio: true,
-            video: false
-        })
+        //const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true})
+        const gdmOptions = {
+            video: {
+              cursor: "always"
+            },
+            audio: {
+              echoCancellation: true,
+              noiseSuppression: true,
+              sampleRate: 44100
+            }
+          }
+        const stream = await navigator.mediaDevices.getDisplayMedia(gdmOptions)
 
         handleAudioStream(stream)
 
