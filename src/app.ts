@@ -8,28 +8,48 @@ export class MainAppComponent extends LitElement {
     
     static styles = css`
         :host {
+		    padding: 0;
+		    margin: 0 auto;
+		    display: grid;
+		    grid-template-rows: auto 1fr auto;
+		    box-sizing: border-box;
             height: 100%;
-            display: flex;
-            flex-direction: column;
+            width: 100%;
+		    min-height: 100%;
+	    }
+	    header {
+		    background: var(--mdc-theme-background);
+		    display: flex;
+		    flex-direction: column;
+		    justify-content: space-between;
+		    align-items: center;
+		    width: 100%;
+	    }
+        main {
+            background: green;
         }
-        header {
-            flex-basis: 6rem;
-            flex-grow: 0;
-            flex-shrink: 0;
-        }
-        stream-viz-poc {
-            flex-basis: auto;
-            flex-grow: 1;
-            flex-shrink: 1;
-        }
-    `;
+	    footer {
+		    display: flex;
+		    justify-content: center;
+		    z-index: 500;
+	    }
+    `
+    //protected createRenderRoot() {
+    //    return this
+    //}
+
     
     render() {
         return html`
             <header>
                 <h1>Audio Viz</h1>
             </header>
-            <stream-viz-poc></stream-viz-poc>
+            <main>
+                <stream-viz-poc></stream-viz-poc>
+            </main>
+            <footer>
+                fot
+            </footer>
         `;
     }
 }

@@ -19,13 +19,27 @@ export class StreamVizPoc extends LitElement {
             flex-grow: 0;
             flex-shrink: 0;
         }
+        .canvas-wrapper {
+            background: yellow;
+        }
         canvas {
-            flex: 1;
-            background: grey;
+            background-color: grey;
         }
         
     `;
     
+    resizeCanvas() {
+        const parent = canvas.parentNode
+        const styles = getComputedStyle(parent)
+        const w = parseInt(styles.getPropertyValue("width"), 10)
+        const h = parseInt(styles.getPropertyValue("height"), 10)
+        canvas.width = w
+        canvas.height = h
+    }
+
+    connectedCallback() {
+
+    }
 
     capture() {
         this.capturing = !this.capturing
@@ -36,9 +50,11 @@ export class StreamVizPoc extends LitElement {
             <div class="controls">
                 <button @click=${this.capture} ?disabled="${this.capturing}">Capture</button>
             </div>
-            <canvas id="audioOutput">
-                audio output here maybe
-            </canvas>
+            <div class="canvas-wrapper">
+                <canvas id="canvas" width="100" height="100">
+                    browser support?
+                </canvas>
+            </div>
         `;
     }
 }
