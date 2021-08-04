@@ -8,6 +8,8 @@ export class StreamVizPoc extends LitElement {
     
     _capturing = false
     
+    _errorMsg = ""
+
     // @query("#canvas-viz")
     _canvas: HTMLCanvasElement | null
 
@@ -33,7 +35,9 @@ export class StreamVizPoc extends LitElement {
         canvas {
             background-color: grey;
         }
-        
+        .errormsg {
+            color: red;
+        }
     `
     
     resizeCanvas() {
@@ -64,9 +68,15 @@ export class StreamVizPoc extends LitElement {
         window.removeEventListener("resize", () => this.resizeCanvas())
         super.disconnectedCallback()
     }
-    capture() {
-        this._capturing = !this._capturing
-        captureAudio(this._canvas as HTMLCanvasElement)
+    async capture() {
+        this._errorMsg = ""
+        try {
+            await captureAudio(this._canvas as HTMLCanvasElement)
+            this._capturing = !this._capturing
+        } catch(error) {
+            this._errorMsg = error.message
+        }
+        
         this.requestUpdate()
     }
 
@@ -74,6 +84,7 @@ export class StreamVizPoc extends LitElement {
         return html`
             <div class="controls">
                 <button @click=${this.capture} ?disabled="${this._capturing}">Capture</button>
+                <span class="errormsg">${this._errorMsg}</span>
             </div>
             <div class="canvas-wrapper">
                 <canvas id="canvas-viz" width="100" height="100">

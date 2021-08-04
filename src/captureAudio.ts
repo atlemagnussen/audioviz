@@ -14,93 +14,95 @@ let canvas: HTMLCanvasElement
 export const captureAudio = async (canv: HTMLCanvasElement) => {
     console.log("Desktop audio capturing")
     canvas = canv
-    WIDTH = canvas.width - 2*padding;
-    HEIGHT = canvas.height - 2*padding;
-    barWidth = (WIDTH / barNumber) -ecart;
+    WIDTH = canvas.width - 2*padding
+    HEIGHT = canvas.height - 2*padding
+    barWidth = (WIDTH / barNumber) -ecart
 
-    if(anim){
-        window.cancelAnimationFrame(anim);
+    if (anim){
+        window.cancelAnimationFrame(anim)
     }
     
-    try {
-        //const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true})
-        const gdmOptions = {
-            video: {
-              cursor: "always"
-            },
-            audio: {
-              echoCancellation: true,
-              noiseSuppression: true,
-              sampleRate: 44100
-            }
-          }
-        const stream = await navigator.mediaDevices.getDisplayMedia(gdmOptions)
+    //const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true})
+    const gdmOptions = {
+        video: {
+            cursor: "always"
+        },
+        audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            sampleRate: 44100
+        }
+        }
+    const stream = await navigator.mediaDevices.getDisplayMedia(gdmOptions)
 
-        handleAudioStream(stream)
-
-    } catch (e) {
-        console.log(e)
-    }
+    handleAudioStream(stream)
 }
 
 const handleAudioStream = (stream: MediaStream) => {
 
-    const context = new AudioContext();
-    const src = context.createMediaStreamSource(stream);
-    const analyser = context.createAnalyser();
-    const ctx = canvas.getContext("2d");
+    if (!stream)
+        throw new Error("no stream at all")
+    
+    if (!canvas)
+        throw new Error("no canvas!")
 
-    src.connect(analyser);
-    analyser.fftSize = 512;
+    const context = new AudioContext()
+    const src = context.createMediaStreamSource(stream)
+    const analyser = context.createAnalyser()
+    
+    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
 
-    const bufferLength = analyser.frequencyBinCount;
-    const bufferByBar = Math.round(bufferLength/barNumber);
-    const dataArray = new Uint8Array(bufferLength);
+    src.connect(analyser)
+    analyser.fftSize = 512
 
-    var barHeight;
-    var x = 0;
+    const bufferLength = analyser.frequencyBinCount
+    const bufferByBar = Math.round(bufferLength/barNumber)
+    const dataArray = new Uint8Array(bufferLength)
+
+    var barHeight
+    var x = 0
 
     const renderFrame = () => {
-        anim = requestAnimationFrame(renderFrame);
+        anim = requestAnimationFrame(renderFrame)
 
-        x = padding;
+        x = padding
 
-        analyser.getByteFrequencyData(dataArray);
+        analyser.getByteFrequencyData(dataArray)
 
-        ctx.fillStyle = "#0f0";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#0f0"
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
 
         for (var i = 0; i < barNumber; i++) {
             barHeight = 0
             for (var j = 0; j < bufferByBar; j++) {
-                barHeight += dataArray[i*bufferByBar+j];
+                barHeight += dataArray[i*bufferByBar+j]
             }
-            barHeight = barHeight/bufferByBar;
+            barHeight = barHeight/bufferByBar
 
-            barHeight = barHeight/700*HEIGHT;
+            barHeight = barHeight/700*HEIGHT
 
-            var r = barHeight + (25 * (i/bufferLength));
-            var g = 250 * (i/bufferLength);
-            var b = 50;
+            // const r = barHeight + (25 * (i/bufferLength));
+            // const g = 250 * (i/bufferLength);
+            // const b = 50;
 
             // var fillStyle = "rgb(" + r + "," + g + "," + b + ")";
-            var fillStyle = "#F00";
+            var fillStyle = "#F00"
 
-            ctx.fillStyle = fillStyle;
+            ctx.fillStyle = fillStyle
             // ctx.fillStyle = "#F00";
-            ctx.fillRect(x, HEIGHT - 2*barHeight - barWidth/2, barWidth, 2*barHeight);
+            ctx.fillRect(x, HEIGHT - 2*barHeight - barWidth/2, barWidth, 2*barHeight)
 
             ctx.beginPath();
-            ctx.arc(x+(barWidth/2), HEIGHT - 2*barHeight -barWidth/2 , barWidth/2, 0, 2 * Math.PI, false);
-            ctx.arc(x+(barWidth/2), HEIGHT - barWidth/2 , barWidth/2, 0, 2 * Math.PI, false);
-            ctx.fill();
-            ctx.lineWidth = 0;
-            ctx.strokeStyle = fillStyle;
-            ctx.stroke();
+            ctx.arc(x+(barWidth/2), HEIGHT - 2*barHeight -barWidth/2 , barWidth/2, 0, 2 * Math.PI, false)
+            ctx.arc(x+(barWidth/2), HEIGHT - barWidth/2 , barWidth/2, 0, 2 * Math.PI, false)
+            ctx.fill()
+            ctx.lineWidth = 0
+            ctx.strokeStyle = fillStyle
+            ctx.stroke()
 
 
-            x += barWidth + ecart;
+            x += barWidth + ecart
         }
     }
-    renderFrame();
+    renderFrame()
 };
