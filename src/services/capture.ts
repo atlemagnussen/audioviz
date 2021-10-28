@@ -2,7 +2,7 @@ export const captureStreamFromDevice = async (device: MediaDeviceInfo) => {
     const gdmOptions: DisplayMediaStreamConstraints = {
         audio: {
             deviceId: device.deviceId,
-            groupId: device.groupId
+            // groupId: device.groupId
         }
     }
 

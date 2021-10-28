@@ -26,6 +26,7 @@ export class MainAppComponent extends LitElement {
     }
 
     render() {
+        this.title = `deviceId: ${this.info.deviceId} groupId: ${this.info.groupId}`
         return html`
             <div>
                 ${this.info.kind}
