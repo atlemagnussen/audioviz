@@ -1,11 +1,14 @@
 import {LitElement, html, css} from "lit"
 import {customElement} from "lit/decorators.js"
-import "./streamVisualizerPoc"
+import "@app/components/streamVisualizerPoc"
+import "@app/components/deviceSelector"
+import "@app/components/deviceInfo"
 
+import { selectedDevice } from "@app/stores/deviceStore"
 
 @customElement('main-app')
 export class MainAppComponent extends LitElement {
-    
+    private device: MediaDeviceInfo | null = null
     static styles = css`
         :host {
 		    padding: 0;
@@ -41,6 +44,13 @@ export class MainAppComponent extends LitElement {
     //    return this
     //}
 
+    constructor() {
+        super()
+        selectedDevice.subscribe(dev => {
+            this.device = dev
+            this.requestUpdate()
+        })
+    }
     
     render() {
         return html`
@@ -48,7 +58,12 @@ export class MainAppComponent extends LitElement {
                 <h1>Audio Viz</h1>
             </header>
             <main>
-                <stream-viz-poc></stream-viz-poc>
+                ${
+                    this.device ? 
+                    html`<stream-viz-poc></stream-viz-poc>` : 
+                    html`<device-selector></device-selector>`
+                }
+                
             </main>
             <footer>
                 fot

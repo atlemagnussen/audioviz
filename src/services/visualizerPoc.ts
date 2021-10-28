@@ -1,3 +1,4 @@
+
 let anim = 0
 
 const padding = 15
@@ -11,7 +12,7 @@ const ecart = 10
 let barWidth: number
 let canvas: HTMLCanvasElement
 
-export const captureAudio = async (canv: HTMLCanvasElement) => {
+export const visualize = async (stream: MediaStream, canv: HTMLCanvasElement) => {
     console.log("Desktop audio capturing")
     canvas = canv
     WIDTH = canvas.width - 2*padding
@@ -22,19 +23,6 @@ export const captureAudio = async (canv: HTMLCanvasElement) => {
         window.cancelAnimationFrame(anim)
     }
     
-    //const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true})
-    const gdmOptions = {
-        video: {
-            cursor: "always"
-        },
-        audio: {
-            echoCancellation: true,
-            noiseSuppression: true,
-            sampleRate: 44100
-        }
-        }
-    const stream = await navigator.mediaDevices.getDisplayMedia(gdmOptions)
-
     handleAudioStream(stream)
 }
 

@@ -1,17 +1,21 @@
 import {LitElement, html, css} from "lit"
 import {customElement} from "lit/decorators.js"
 //import {query} from "lit/decorators/query.js"
-import { captureAudio } from "./captureAudio"
+import { visualize } from "@app/services/visualizerPoc"
+import { captureStreamFromDevice } from "@app/services/capture"
+import { selectedDevice } from "@app/stores/deviceStore"
+import { Subscription } from "rxjs"
 
 @customElement('stream-viz-poc')
 export class StreamVizPoc extends LitElement {
-    
+    sub: Subscription | null = null
+    device: MediaDeviceInfo | null = null
     _capturing = false
     
     _errorMsg = ""
 
     // @query("#canvas-viz")
-    _canvas: HTMLCanvasElement | null
+    _canvas: HTMLCanvasElement | null = null
 
     static styles = css`
         :host {
@@ -40,6 +44,7 @@ export class StreamVizPoc extends LitElement {
         }
     `
     
+    
     resizeCanvas() {
         this._canvas = this.renderRoot.querySelector("#canvas-viz")
         if (!this._canvas) {
@@ -63,17 +68,24 @@ export class StreamVizPoc extends LitElement {
     connectedCallback() {
         super.connectedCallback()
         window.addEventListener("resize", () => this.resizeCanvas())
+        this.sub = selectedDevice.subscribe(device => {
+            this.device = device
+            this.requestUpdate()
+        })
     }
     disconnectedCallback() {
         window.removeEventListener("resize", () => this.resizeCanvas())
         super.disconnectedCallback()
+        this.sub?.unsubscribe()
     }
     async capture() {
         this._errorMsg = ""
         try {
-            await captureAudio(this._canvas as HTMLCanvasElement)
+            const stream = await captureStreamFromDevice(this.device!)
+            await visualize(stream, this._canvas as HTMLCanvasElement)
             this._capturing = !this._capturing
         } catch(error) {
+            // @ts-ignore
             this._errorMsg = error.message
         }
         
@@ -82,10 +94,18 @@ export class StreamVizPoc extends LitElement {
 
     render() {
         return html`
-            <div class="controls">
-                <button @click=${this.capture} ?disabled="${this._capturing}">Capture</button>
-                <span class="errormsg">${this._errorMsg}</span>
-            </div>
+            ${
+                this.device ? 
+                html`
+                    <div class="controls">
+                        <device-info .info=${this.device}></device-info>
+                        <button @click=${this.capture} ?disabled="${this._capturing}">Capture</button>
+                        <span class="errormsg">${this._errorMsg}</span>
+                    </div>
+                ` : 
+                html`<p>Source not selected?</p>`
+            }
+            
             <div class="canvas-wrapper">
                 <canvas id="canvas-viz" width="100" height="100">
                     browser support?
