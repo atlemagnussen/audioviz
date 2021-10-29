@@ -8,4 +8,5 @@ https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder
 
 https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API
 
+https://webrtc.github.io/samples/src/content/devices/multi/
 https://github.com/webrtc/samples/tree/gh-pages/src/content/devices/multi
