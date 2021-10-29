@@ -7,3 +7,5 @@ Read this: https://developers.google.com/web/updates/2015/10/media-devices
 https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder
 
 https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API
+
+https://github.com/webrtc/samples/tree/gh-pages/src/content/devices/multi
