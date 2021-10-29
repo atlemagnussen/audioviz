@@ -5,10 +5,12 @@ import "@app/components/deviceSelector"
 import "@app/components/deviceInfo"
 
 import { selectedDevice } from "@app/stores/deviceStore"
+import { currentStream } from "@app/stores/streamStore"
 
 @customElement('main-app')
 export class MainAppComponent extends LitElement {
     private device: MediaDeviceInfo | null = null
+    private stream: MediaStream | null = null
     static styles = css`
         :host {
 		    padding: 0;
@@ -50,17 +52,23 @@ export class MainAppComponent extends LitElement {
             this.device = dev
             this.requestUpdate()
         })
+        currentStream.subscribe(str => {
+            this.stream = str
+            this.requestUpdate()
+        })
     }
     
     render() {
         return html`
             <header>
-                <h1>Audio Viz</h1>
+                <a href="/">
+                    <h1>Audio Viz</h1>
+                </a>
             </header>
             <main>
                 ${
-                    this.device ? 
-                    html`<stream-viz-poc></stream-viz-poc>` : 
+                    this.stream ?
+                    html`<stream-viz-poc></stream-viz-poc>` :
                     html`<device-selector></device-selector>`
                 }
                 

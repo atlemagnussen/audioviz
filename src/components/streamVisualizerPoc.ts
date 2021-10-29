@@ -1,14 +1,14 @@
 import {LitElement, html, css} from "lit"
 import {customElement} from "lit/decorators.js"
 //import {query} from "lit/decorators/query.js"
-import { visualize } from "@app/services/visualizerPoc"
-import { captureStreamFromDevice } from "@app/services/capture"
-import { selectedDevice } from "@app/stores/deviceStore"
+import { visualize, stopViz } from "@app/services/visualizerPoc"
+import { currentStream, setCurrentStream } from "@app/stores/streamStore"
 import { Subscription } from "rxjs"
 
 @customElement('stream-viz-poc')
 export class StreamVizPoc extends LitElement {
     sub: Subscription | null = null
+    stream: MediaStream | null = null
     device: MediaDeviceInfo | null = null
     _capturing = false
     
@@ -25,11 +25,7 @@ export class StreamVizPoc extends LitElement {
             background: black;
             color: white
         }
-        .controls {
-            flex-basis: 2rem;
-            flex-grow: 0;
-            flex-shrink: 0;
-        }
+        
         .canvas-wrapper {
             margin: 0;
             padding: 0;
@@ -63,14 +59,16 @@ export class StreamVizPoc extends LitElement {
     
     updated() {
         this.resizeCanvas()
+        this.startViz()
     }
-
+    // firstUpdated() {
+        
+    // }
     connectedCallback() {
         super.connectedCallback()
         window.addEventListener("resize", () => this.resizeCanvas())
-        this.sub = selectedDevice.subscribe(device => {
-            this.device = device
-            this.requestUpdate()
+        this.sub = currentStream.subscribe(str => {
+            this.stream = str
         })
     }
     disconnectedCallback() {
@@ -78,34 +76,32 @@ export class StreamVizPoc extends LitElement {
         super.disconnectedCallback()
         this.sub?.unsubscribe()
     }
-    async capture() {
+    async startViz() {
+        if (!this.stream)
+            return
+        if (this._capturing)
+            return
         this._errorMsg = ""
         try {
-            const stream = await captureStreamFromDevice(this.device!)
-            await visualize(stream, this._canvas as HTMLCanvasElement)
-            this._capturing = !this._capturing
+            await visualize(this.stream!, this._canvas as HTMLCanvasElement)
+            this._capturing = true
         } catch(error) {
+            console.error(error)
             // @ts-ignore
             this._errorMsg = error.message
         }
         
         this.requestUpdate()
     }
-
+    stop() {
+        stopViz()
+        setCurrentStream(null)
+    }
     render() {
         return html`
-            ${
-                this.device ? 
-                html`
-                    <div class="controls">
-                        <device-info .info=${this.device}></device-info>
-                        <button @click=${this.capture} ?disabled="${this._capturing}">Capture</button>
-                        <span class="errormsg">${this._errorMsg}</span>
-                    </div>
-                ` : 
-                html`<p>Source not selected?</p>`
-            }
-            
+            <div class="controls">
+                <button @click=${this.stop}>Stop</button>
+            </div>
             <div class="canvas-wrapper">
                 <canvas id="canvas-viz" width="100" height="100">
                     browser support?
@@ -113,4 +109,5 @@ export class StreamVizPoc extends LitElement {
             </div>
         `
     }
+    
 }

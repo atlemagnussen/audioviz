@@ -13,6 +13,8 @@ const loadSources = async () => {
     const devices = await navigator.mediaDevices.enumerateDevices()
     const audioDevices = devices.filter(d => d.kind == "audioinput" || d.kind == "audiooutput")
     audioDevicesSubject.next(audioDevices)
+    const constrains = await navigator.mediaDevices.getSupportedConstraints()
+    console.log(constrains)
 }
 
 document.addEventListener("DOMContentLoaded", () => {

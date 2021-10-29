@@ -12,6 +12,8 @@ const ecart = 10
 let barWidth: number
 let canvas: HTMLCanvasElement
 
+let src: MediaStreamAudioSourceNode | null
+
 export const visualize = async (stream: MediaStream, canv: HTMLCanvasElement) => {
     console.log("Desktop audio capturing")
     canvas = canv
@@ -26,6 +28,15 @@ export const visualize = async (stream: MediaStream, canv: HTMLCanvasElement) =>
     handleAudioStream(stream)
 }
 
+export const stopViz = () => {
+    if (anim){
+        window.cancelAnimationFrame(anim)
+    }
+    if (src) {
+        src.disconnect()
+    }
+}
+
 const handleAudioStream = (stream: MediaStream) => {
 
     if (!stream)
@@ -35,12 +46,13 @@ const handleAudioStream = (stream: MediaStream) => {
         throw new Error("no canvas!")
 
     const context = new AudioContext()
-    const src = context.createMediaStreamSource(stream)
+    src = context.createMediaStreamSource(stream)
     const analyser = context.createAnalyser()
     
     const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
 
     src.connect(analyser)
+    
     analyser.fftSize = 512
 
     const bufferLength = analyser.frequencyBinCount
@@ -68,12 +80,6 @@ const handleAudioStream = (stream: MediaStream) => {
             barHeight = barHeight/bufferByBar
 
             barHeight = barHeight/700*HEIGHT
-
-            // const r = barHeight + (25 * (i/bufferLength));
-            // const g = 250 * (i/bufferLength);
-            // const b = 50;
-
-            // var fillStyle = "rgb(" + r + "," + g + "," + b + ")";
             var fillStyle = "#F00"
 
             ctx.fillStyle = fillStyle
