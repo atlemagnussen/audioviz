@@ -83,8 +83,8 @@ export class StreamVizPoc extends LitElement {
             return
         this._errorMsg = ""
         try {
-            await visualize(this.stream!, this._canvas as HTMLCanvasElement)
             this._capturing = true
+            await visualize(this.stream!, this._canvas as HTMLCanvasElement)
         } catch(error) {
             console.error(error)
             // @ts-ignore
