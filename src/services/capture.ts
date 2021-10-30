@@ -1,3 +1,4 @@
+
 export const captureStreamFromDevice = async (device: MediaDeviceInfo) => {
     const gdmOptions: DisplayMediaStreamConstraints = {
         audio: {
@@ -14,6 +15,36 @@ export const captureStreamFromDevice = async (device: MediaDeviceInfo) => {
 }
 
 export const captureScreen = async () => {
+    // @ts-ignore
+    const isElectron = window.IN_ELECTRON_ENV
+    console.log(`isElectron=${isElectron}`)
+
+    if (isElectron) {
+        return captureScreenElectron()
+    }
+    return captureScreenWeb()
+    
+}
+
+const captureScreenElectron = async () => {
+    const gdmOptions = {
+        audio: {
+            mandatory: {
+                chromeMediaSource: 'desktop'
+            }
+        },
+        video: {
+            mandatory: {
+                chromeMediaSource: 'desktop'
+            }
+        }
+    }
+    // @ts-ignore
+    const stream = await navigator.mediaDevices.getDisplayMedia(gdmOptions)
+    return stream
+}
+
+const captureScreenWeb = async () => {
     const gdmOptions: DisplayMediaStreamConstraints = {
         video: true,
         audio: {
@@ -22,5 +53,5 @@ export const captureScreen = async () => {
         }
     }
     const stream = await navigator.mediaDevices.getDisplayMedia(gdmOptions)
-    return stream;
+    return stream
 }

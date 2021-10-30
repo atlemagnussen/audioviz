@@ -1,3 +1,4 @@
+const { contextBridge } = require("electron")
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
 window.addEventListener("DOMContentLoaded", () => {
@@ -7,8 +8,8 @@ window.addEventListener("DOMContentLoaded", () => {
         if (element)
             element.innerText = text
     }
-    
-    for (const type of ['chrome', 'node', 'electron']) {
-        replaceText(`${type}-version`, process.versions[type])
-    }
+    contextBridge.exposeInMainWorld("IN_ELECTRON_ENV", true);
+    // for (const type of ['chrome', 'node', 'electron']) {
+    //     replaceText(`${type}-version`, process.versions[type])
+    // }
 })

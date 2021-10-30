@@ -13,7 +13,7 @@
     "deploy": "npm run build && npm run deploy-client",
     "cp:electron": "cp ./electron/* ./dist",
     "electron": "electron ./dist/main.js",
-    "start:electron": "run-p build:watch electron"
+    "start:electron": "run-p cp:electron build:watch electron"
   },
   "repository": {
     "type": "git",
