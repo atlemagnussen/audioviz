@@ -1,3 +1,6 @@
+import { getSourcesElectron } from "./captureElectron"
+
+getSourcesElectron()
 
 export const captureStreamFromDevice = async (device: MediaDeviceInfo) => {
     const gdmOptions: DisplayMediaStreamConstraints = {

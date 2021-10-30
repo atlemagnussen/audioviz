@@ -1,7 +1,7 @@
 import {LitElement, html, css} from "lit"
 import {customElement} from "lit/decorators.js"
 import { captureStreamFromDevice, captureScreen } from "@app/services/capture"
-import { audioDevices, setSelectedDevice, selectedDevice } from "@app/stores/deviceStore"
+import { audioDevices, setSelectedDevice, selectedDevice, loadSources } from "@app/stores/deviceStore"
 import { setCurrentStream } from "@app/stores/streamStore"
 import { Subscription } from "rxjs"
 
@@ -95,6 +95,7 @@ export class MainAppComponent extends LitElement {
             <div>
                 <header>
                     <h3>Select source</h3>
+                    <button @click=${loadSources}>Refresh</button>
                 </header>
                 <div class="list">
                     ${this.devices.map(d => {

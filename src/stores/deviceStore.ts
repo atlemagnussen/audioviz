@@ -9,10 +9,32 @@ export const setSelectedDevice = (device: MediaDeviceInfo) => {
     selectedDeviceSubject.next(device)
 }
 
-const loadSources = async () => {
-    const devices = await navigator.mediaDevices.enumerateDevices()
-    const audioDevices = devices.filter(d => d.kind == "audioinput" || d.kind == "audiooutput") // 
-    audioDevicesSubject.next(audioDevices)
+let isElectron = false
+
+export const loadSources = async () => {
+    // @ts-ignore
+    isElectron = window.IN_ELECTRON_ENV
+    if (isElectron) {
+        // @ts-ignore
+        const electronDevices = window.ELECTRON_SOURCES
+        const devices = electronDevices.map((e: { id: any; name: any }) => {
+            const d: MediaDeviceInfo = {
+                deviceId: e.id,
+                label: e.name,
+                kind: "audiooutput",
+                groupId: "",
+                toJSON: () => {}
+            }
+            return d
+        })
+        audioDevicesSubject.next(devices)
+    }
+    else {
+        const devices = await navigator.mediaDevices.enumerateDevices()
+        const audioDevices = devices.filter(d => d.kind == "audioinput" || d.kind == "audiooutput") // 
+        audioDevicesSubject.next(audioDevices)
+    }
+    
     // const constrains = await navigator.mediaDevices.getSupportedConstraints()
     // console.log(constrains)
 }
