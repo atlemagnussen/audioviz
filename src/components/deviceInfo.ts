@@ -34,12 +34,6 @@ export class MainAppComponent extends LitElement {
             <div>
                 ${this.info.label}
             </div>
-            <!-- <div class="small">
-                ${this.info.deviceId}
-            </div>
-            <div class="small">
-                ${this.info.groupId}
-            </div> -->
-        `;
+        `
     }
 }

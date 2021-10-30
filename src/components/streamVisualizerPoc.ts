@@ -1,7 +1,7 @@
 import {LitElement, html, css} from "lit"
 import {customElement} from "lit/decorators.js"
 //import {query} from "lit/decorators/query.js"
-import { visualize, stopViz } from "@app/services/visualizerPoc"
+import { visualize, stopViz, getAudioTrackLabel } from "@app/services/visualizerPoc"
 import { currentStream, setCurrentStream } from "@app/stores/streamStore"
 import { Subscription } from "rxjs"
 
@@ -11,7 +11,7 @@ export class StreamVizPoc extends LitElement {
     stream: MediaStream | null = null
     device: MediaDeviceInfo | null = null
     _capturing = false
-    
+    _audioTrackLabel = ""
     _errorMsg = ""
 
     // @query("#canvas-viz")
@@ -85,6 +85,7 @@ export class StreamVizPoc extends LitElement {
         try {
             this._capturing = true
             await visualize(this.stream!, this._canvas as HTMLCanvasElement)
+            this._audioTrackLabel = getAudioTrackLabel(this.stream!)
         } catch(error) {
             console.error(error)
             // @ts-ignore
@@ -101,6 +102,7 @@ export class StreamVizPoc extends LitElement {
         return html`
             <div class="controls">
                 <button @click=${this.stop}>Stop</button>
+                <span>Label: ${this._audioTrackLabel}</span>
             </div>
             <div class="canvas-wrapper">
                 <canvas id="canvas-viz" width="100" height="100">

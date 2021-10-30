@@ -12,6 +12,7 @@ const ecart = 10
 let barWidth: number
 let canvas: HTMLCanvasElement
 
+let stream: MediaStream | null
 let src: MediaStreamAudioSourceNode | null
 
 export const visualize = async (stream: MediaStream, canv: HTMLCanvasElement) => {
@@ -35,17 +36,45 @@ export const stopViz = () => {
     if (src) {
         src.disconnect()
     }
+    stream?.getAudioTracks().map(at => at.stop())
+    stream?.getVideoTracks().map(vt => vt.stop())
+    stream = null
+    src = null
 }
 
-const handleAudioStream = (stream: MediaStream) => {
+export const getAudioTrackLabel = (stream: MediaStream) => {
+    let label = ""
+    const audioTracks = stream.getAudioTracks()
+    
+    if (audioTracks && audioTracks.length > 0) {
+        for (const track of audioTracks) {
+            // const settings = track.getSettings()
+            // console.log(settings)
+            if (track.label)
+                label = `${label} ${track.label}`
+        }
+    }
+    // const videoTracks = stream.getVideoTracks()
+    // if (videoTracks && videoTracks.length > 0) {
+    //     for (const track of videoTracks) {
+    //         const settings = track.getSettings()
+    //         console.log(settings)
+    //         console.log(track)
+    //     }
+    // }
+    return label
+}
+const handleAudioStream = (str: MediaStream) => {
 
-    if (!stream)
+    if (!str)
         throw new Error("no stream at all")
     
     if (!canvas)
         throw new Error("no canvas!")
 
     const context = new AudioContext()
+    
+    stream = str
     src = context.createMediaStreamSource(stream)
     const analyser = context.createAnalyser()
     

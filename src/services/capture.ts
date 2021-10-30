@@ -15,7 +15,7 @@ export const captureStreamFromDevice = async (device: MediaDeviceInfo) => {
 
 export const captureScreen = async () => {
     const gdmOptions: DisplayMediaStreamConstraints = {
-        video: false,
+        video: true,
         audio: {
             echoCancellation: true,
             sampleRate: 44100
