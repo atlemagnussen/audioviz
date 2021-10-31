@@ -20,6 +20,9 @@ export class MainAppComponent extends LitElement {
         
         return html`
             <div class="small">
+                platform: ${config.platform}
+            </div>
+            <div class="small">
                 userMedia: ${config.features.getUserMedia}
             </div>
             <div class="small">

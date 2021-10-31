@@ -3,9 +3,10 @@ const { desktopCapturer } = require("electron")
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
 
-const electronEnv = {}
+const electronEnv = { platform: process.platform }
 for (const type of ['chrome', 'node', 'electron']) {
     electronEnv[type] = process.versions[type]
+    process.platform
 }
 
 contextBridge.exposeInMainWorld("ELECTRON_ENV", electronEnv)
