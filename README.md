@@ -1,12 +1,12 @@
 # Audio Viz
 
-## Audio capture features matrix possible
+## Audio capture matrix
 
 |                       | Windows | MacOS     | Linux  |
 | --------------------- | ------- | --------- | ------ |
 | System audio web      | yes     | no        |        |
 | System audio electron | yes     | no        |        |
-| Browser tab           | yes     | yes       |        |
+| Browser tab web       | yes     | yes       |        |
 | Mic web               | yes     | yes       |        |
 | Mic electron          | yes     | yes       |        |
 
