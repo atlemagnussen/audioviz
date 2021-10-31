@@ -13,7 +13,7 @@ export const setSelectedDevice = (device: MediaDeviceInfo) => {
 export const loadSources = async () => {
     const devices = await navigator.mediaDevices.enumerateDevices()
     const audioDevices = devices.filter(d => d.kind == "audioinput") // 
-    audioDevicesSubject.next(devices)
+    audioDevicesSubject.next(audioDevices)
     console.log(audioDevices)
 
     if (audioDevices.length == 0)
