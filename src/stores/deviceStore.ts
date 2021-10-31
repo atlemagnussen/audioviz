@@ -12,9 +12,20 @@ export const setSelectedDevice = (device: MediaDeviceInfo) => {
 
 export const loadSources = async () => {
     const devices = await navigator.mediaDevices.enumerateDevices()
-    const audioDevices = devices.filter(d => d.kind == "audioinput" || d.kind == "audiooutput") // 
-    audioDevicesSubject.next(audioDevices)
-    
+    const audioDevices = devices.filter(d => d.kind == "audioinput") // 
+    audioDevicesSubject.next(devices)
+    console.log(audioDevices)
+
+    if (audioDevices.length == 0)
+        return
+    if (audioDevices.length == 1)
+        setSelectedDevice(audioDevices[0])
+
+    let defaultDevice = audioDevices.find(d => d.deviceId == "default")
+    if (!defaultDevice)
+        defaultDevice = audioDevices[0]
+    setSelectedDevice(defaultDevice)
+    console.log("defaultDevice", defaultDevice)
     // const constrains = await navigator.mediaDevices.getSupportedConstraints()
     // console.log(constrains)
 }

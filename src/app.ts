@@ -1,17 +1,24 @@
 import {LitElement, html, css} from "lit"
 import {customElement} from "lit/decorators.js"
+
+import "@material/mwc-icon"
+import "@material/mwc-button"
+import "@material/mwc-select"
+import "@material/mwc-list"
+import "@material/mwc-list/mwc-list-item"
+
+import "@app/styles/colors.css"
 import "@app/components/streamVisualizerPoc"
 import "@app/components/deviceSelector"
 import "@app/components/deviceInfo"
 import "@app/components/appInfo"
 import "@app/components/featuresInfo"
 
-import { selectedDevice } from "@app/stores/deviceStore"
 import { currentStream } from "@app/stores/streamStore"
 
 @customElement('main-app')
 export class MainAppComponent extends LitElement {
-    private device: MediaDeviceInfo | null = null
+    
     private stream: MediaStream | null = null
     static styles = css`
         :host {
@@ -25,7 +32,7 @@ export class MainAppComponent extends LitElement {
 		    min-height: 100%;
 	    }
 	    header {
-		    background: var(--mdc-theme-background);
+		    background: var(--av-main-background);
 		    display: flex;
 		    flex-direction: row;
 		    justify-content: space-between;
@@ -33,7 +40,7 @@ export class MainAppComponent extends LitElement {
 		    width: 100%;
 	    }
         main {
-            background: green;
+            background: var(--av-main-background);
         }
 	    footer {
 		    display: flex;
@@ -43,17 +50,13 @@ export class MainAppComponent extends LitElement {
         stream-viz-poc {
             height: 100%;
         }
+        a {
+            color: var(--av-main-foreground);
+        }
     `
-    //protected createRenderRoot() {
-    //    return this
-    //}
 
     constructor() {
         super()
-        selectedDevice.subscribe(dev => {
-            this.device = dev
-            this.requestUpdate()
-        })
         currentStream.subscribe(str => {
             this.stream = str
             this.requestUpdate()

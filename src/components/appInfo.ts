@@ -11,6 +11,9 @@ export class MainAppComponent extends LitElement {
             flex-direction: column;
             gap: 0.2rem;
 	    }
+        div {
+            color: var(--av-secondary-foreground);
+        }
 	    .small {
             font-size: x-small;
         }

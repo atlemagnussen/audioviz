@@ -9,13 +9,13 @@ import typescript from "@rollup/plugin-typescript"
 import alias from "@rollup/plugin-alias"
 
 const projectRootDir = path.resolve(__dirname)
-
+const appSrcPath = path.resolve(projectRootDir, "src")
 export default {
     plugins: [
         typescript(),
         alias({
             entries: [
-                { find: "@app", replacement: path.resolve(projectRootDir, "src") },
+                { find: "@app", replacement: appSrcPath},
             ]
         }),
         html({

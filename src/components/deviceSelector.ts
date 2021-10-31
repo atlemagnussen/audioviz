@@ -15,10 +15,11 @@ export class MainAppComponent extends LitElement {
     static styles = css`
         :host {
 		    display: flex;
+            flex-direction: column;
             gap: 0.3rem;
 	    }
 	    header {
-		    background: var(--mdc-theme-background);
+		    color: var(--av-secondary-foreground);
 		    display: flex;
 		    flex-direction: column;
 		    justify-content: space-between;
@@ -37,15 +38,23 @@ export class MainAppComponent extends LitElement {
         }
         .controls {
             margin-top: 1rem;
-            background: lightblue;
+            padding: 0.5rem;
+            border-radius: 3px;
         }
         .errormsg {
+            border-radius: 3px;
             color: red;
+            padding: 0.5rem;
+        }
+        mwc-button {
+            --mdc-theme-primary: #e9437a;
+            --mdc-theme-on-primary: white;
+        }
+        mwc-select {
+            --mdc-theme-primary: #e9437a;
         }
     `
-    //protected createRenderRoot() {
-    //    return this
-    //}
+    
 
     connectedCallback() {
         super.connectedCallback()
@@ -72,11 +81,7 @@ export class MainAppComponent extends LitElement {
             setCurrentStream(stream)
         }
         catch (error) {
-            console.error(error)
-            // @ts-ignore
-            if (error.message) this._errorMsg = error.message
-            // @ts-ignore
-            if (error.name) this._errorMsg = error.name
+            this.errorHandler(error)
         }
     }
     async captureScreen() {
@@ -85,10 +90,21 @@ export class MainAppComponent extends LitElement {
             setCurrentStream(stream)
         }
         catch (error) {
-            console.error(error)
-            // @ts-ignore
-            this._errorMsg = error.message || error.name
+            this.errorHandler(error)
         }
+    }
+    errorHandler(error:any) {
+        console.log(error)
+        // @ts-ignore
+        if (error.message) this._errorMsg = error.message
+        // @ts-ignore
+        if (error.name) this._errorMsg = `${this._errorMsg} ${error.name}`
+        this.requestUpdate()
+    }
+    setSelectedDev(e: any) {
+        const index = e.detail.index
+        const dev = this.devices[index]
+        setSelectedDevice(dev)
     }
     render() {
         if (config.noCaptureSupport) {
@@ -108,36 +124,31 @@ export class MainAppComponent extends LitElement {
                 <header>
                     <h3>Select source</h3>
                 </header>
-                <div class="list">
-                    ${this.devices.map(d => {
-                        return html`
-                            <device-info .info=${d} @click=${() => setSelectedDevice(d)}></device-info>
-                        `
-                    })}
-                </div>
                 
                 <div class="controls">
-                    ${
-                        this.selectedDevice ? 
-                        html`
-                            
-                            <device-info .info=${this.selectedDevice}></device-info>
-                            <button @click=${this.captureDevice}>Capture device</button>
-                            <span class="errormsg">${this._errorMsg}</span>
-                        
-                        ` : 
-                        html`<p>Source not selected?</p>`
-                        
-                    }
-                    ${config.features.getDisplayMedia ? html`
+                    <mwc-button raised icon="mic" label="Capture audio input device" @click=${this.captureDevice}></mwc-button>
+                    <mwc-select label="Input device" @selected=${(e:any) => this.setSelectedDev(e)}>
+                        ${this.devices.map(d => {
+                            return html`
+                                <mwc-list-item 
+                                    value=${d.deviceId}
+                                    .selected=${d.deviceId == this.selectedDevice?.deviceId}>
+                                    ${d.label}
+                                </mwc-list-item>
+                            `
+                        })}
+                    </mwc-select>
+                </div>
+
+                ${config.features.getDisplayMedia ? html`
                         <div class="controls">
-                            <button @click=${this.captureScreen}>Capture screen</button>
+                            <mwc-button raised icon="desktop_windows" label="Capture screen or tab" @click=${this.captureScreen}></mwc-button>
                         </div>
                     ` : html `<span class="no-support"></span>`}
-                    
-                </div>
+                
+                <div class="errormsg">${this._errorMsg}</div>
             </div>
             
-        `;
+        `
     }
 }
