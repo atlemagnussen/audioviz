@@ -16,7 +16,7 @@
     "deploy": "npm run build:vite && npm run deploy-client",
     "cp:electron": "cp ./electron/* ./dist",
     "electron": "electron ./dist/main.js",
-    "start:electron": "run-p cp:electron build:watch electron"
+    "start:electron": "run-p cp:electron rollup:watch electron"
   },
   "repository": {
     "type": "git",
