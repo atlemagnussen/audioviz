@@ -17,11 +17,11 @@ export const captureScreen = async () => {
 const captureDeviceWeb = async (device: MediaDeviceInfo) => {
     const gdmOptions: DisplayMediaStreamConstraints = {
         audio: {
-            deviceId: {
-                exact: device.deviceId
-            }
-            // deviceId: device.deviceId,
-            // groupId: device.groupId
+            // deviceId: {
+            //     exact: device.deviceId
+            // }
+            deviceId: device.deviceId,
+            groupId: device.groupId
         }
     }
 
