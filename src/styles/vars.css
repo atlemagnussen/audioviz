@@ -1,0 +1,13 @@
+:root {
+    --av-black: #222;
+    --av-black-light: #444;
+
+    --av-grey: #bbb;
+
+    --av-white: #eee;
+
+    --av-blue-purple: #5068b7;
+    --av-red: rgba(161, 15, 15, 0.685);
+    --av-green: rgb(23, 160, 80);
+    --av-pink: #e9437a;
+}

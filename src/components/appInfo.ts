@@ -34,7 +34,7 @@ export class MainAppComponent extends LitElement {
             `
         else
             return html`
-                <div>Web</div>
+                <div>&nbsp;&nbsp;&nbsp;</div>
             `
     }
 }

@@ -14,6 +14,8 @@ export class MainAppComponent extends LitElement {
 
     static styles = css`
         :host {
+            background: var(--av-secondary-background);
+            border-radius: 4px;
 		    display: flex;
             flex-direction: column;
             gap: 0.3rem;
@@ -43,15 +45,17 @@ export class MainAppComponent extends LitElement {
         }
         .errormsg {
             border-radius: 3px;
-            color: red;
+            color: var(--mdc-theme-error);
             padding: 0.5rem;
         }
         mwc-button {
-            --mdc-theme-primary: #e9437a;
-            --mdc-theme-on-primary: white;
+            --mdc-theme-primary: var(--av-pink);
         }
         mwc-select {
-            --mdc-theme-primary: #e9437a;
+            width: 19rem;
+            --mdc-list-side-padding: 5px;
+            --mdc-list-item-graphic-margin: 5px;
+            /* --mdc-ripple-color: transparent; */
         }
     `
     
@@ -127,13 +131,15 @@ export class MainAppComponent extends LitElement {
                 
                 <div class="controls">
                     <mwc-button raised icon="mic" label="Capture audio input device" @click=${this.captureDevice}></mwc-button>
-                    <mwc-select label="Input device" @selected=${(e:any) => this.setSelectedDev(e)}>
+                    <mwc-select @selected=${(e:any) => this.setSelectedDev(e)}>
                         ${this.devices.map(d => {
                             return html`
-                                <mwc-list-item 
+                                <mwc-list-item graphic="icon"
                                     value=${d.deviceId}
                                     .selected=${d.deviceId == this.selectedDevice?.deviceId}>
-                                    ${d.label}
+                                        <span>${d.label}</span>
+                                        <mwc-icon slot="graphic">mic</mwc-icon>
+                                    
                                 </mwc-list-item>
                             `
                         })}

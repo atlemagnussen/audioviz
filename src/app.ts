@@ -7,7 +7,9 @@ import "@material/mwc-select"
 import "@material/mwc-list"
 import "@material/mwc-list/mwc-list-item"
 
-import "@app/styles/colors.css"
+import "@app/styles/vars.css"
+import "@app/styles/theme.css"
+
 import "@app/components/streamVisualizerPoc"
 import "@app/components/deviceSelector"
 import "@app/components/deviceInfo"
@@ -41,6 +43,7 @@ export class MainAppComponent extends LitElement {
 	    }
         main {
             background: var(--av-main-background);
+            padding: 0.2rem;
         }
 	    footer {
 		    display: flex;

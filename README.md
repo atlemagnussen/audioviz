@@ -1,5 +1,15 @@
 # Audio Viz
 
+## Audio capture features matrix possible
+
+|                       | Windows | MacOS     | Linux  |
+| --------------------- | ------- | --------- | ------ |
+| System audio web      | yes     | no        |        |
+| System audio electron | yes     | no        |        |
+| Browser tab           | yes     | yes       |        |
+| Mic web               | yes     | yes       |        |
+| Mic electron          | yes     | yes       |        |
+
 Try capturing audio in web using [getUserMedia](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia)
 
 Read this: https://developers.google.com/web/updates/2015/10/media-devices
