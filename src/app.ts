@@ -3,6 +3,8 @@ import {customElement} from "lit/decorators.js"
 import "@app/components/streamVisualizerPoc"
 import "@app/components/deviceSelector"
 import "@app/components/deviceInfo"
+import "@app/components/appInfo"
+import "@app/components/featuresInfo"
 
 import { selectedDevice } from "@app/stores/deviceStore"
 import { currentStream } from "@app/stores/streamStore"
@@ -25,7 +27,7 @@ export class MainAppComponent extends LitElement {
 	    header {
 		    background: var(--mdc-theme-background);
 		    display: flex;
-		    flex-direction: column;
+		    flex-direction: row;
 		    justify-content: space-between;
 		    align-items: center;
 		    width: 100%;
@@ -61,9 +63,11 @@ export class MainAppComponent extends LitElement {
     render() {
         return html`
             <header>
+                <features-info></features-info>
                 <a href="/">
                     <h1>Audio Viz</h1>
                 </a>
+                <app-info></app-info>
             </header>
             <main>
                 ${

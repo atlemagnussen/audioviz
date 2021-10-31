@@ -1,4 +1,5 @@
 import { BehaviorSubject } from "rxjs"
+import config from "@app/config"
 
 const audioDevicesSubject = new BehaviorSubject<MediaDeviceInfo[]>([])
 export const audioDevices = audioDevicesSubject.asObservable()
@@ -9,12 +10,17 @@ export const setSelectedDevice = (device: MediaDeviceInfo) => {
     selectedDeviceSubject.next(device)
 }
 
-let isElectron = false
-
 export const loadSources = async () => {
-    // @ts-ignore
-    isElectron = window.IN_ELECTRON_ENV
-    if (isElectron) {
+    const devices = await navigator.mediaDevices.enumerateDevices()
+    const audioDevices = devices.filter(d => d.kind == "audioinput" || d.kind == "audiooutput") // 
+    audioDevicesSubject.next(audioDevices)
+    
+    // const constrains = await navigator.mediaDevices.getSupportedConstraints()
+    // console.log(constrains)
+}
+
+const loadElectronSources = () => {
+    if (config.isElectron) {
         // @ts-ignore
         const electronDevices = window.ELECTRON_SOURCES
         const devices = electronDevices.map((e: { id: any; name: any }) => {
@@ -29,15 +35,16 @@ export const loadSources = async () => {
         })
         audioDevicesSubject.next(devices)
     }
-    else {
-        const devices = await navigator.mediaDevices.enumerateDevices()
-        const audioDevices = devices.filter(d => d.kind == "audioinput" || d.kind == "audiooutput") // 
-        audioDevicesSubject.next(audioDevices)
-    }
-    
-    // const constrains = await navigator.mediaDevices.getSupportedConstraints()
-    // console.log(constrains)
 }
+
+document.addEventListener("electron-sources-ready", (e: Event) => {
+    // const evt = e as CustomEvent
+    // console.log(evt.detail)
+    loadElectronSources()
+}, {
+    once: true
+})
+
 
 document.addEventListener("DOMContentLoaded", () => {
     loadSources()

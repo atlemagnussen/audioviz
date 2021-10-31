@@ -1,10 +1,10 @@
 import {LitElement, html, css} from "lit"
 import {customElement} from "lit/decorators.js"
-import { captureStreamFromDevice, captureScreen } from "@app/services/capture"
-import { audioDevices, setSelectedDevice, selectedDevice, loadSources } from "@app/stores/deviceStore"
+import { captureDevice, captureScreen } from "@app/services/capture"
+import { audioDevices, setSelectedDevice, selectedDevice } from "@app/stores/deviceStore"
 import { setCurrentStream } from "@app/stores/streamStore"
 import { Subscription } from "rxjs"
-
+import config from "@app/config"
 @customElement('device-selector')
 export class MainAppComponent extends LitElement {
     private subs: Subscription[] = []
@@ -68,7 +68,7 @@ export class MainAppComponent extends LitElement {
             return
         this._errorMsg = ""
         try {
-            const stream = await captureStreamFromDevice(this.selectedDevice)
+            const stream = await captureDevice(this.selectedDevice)
             setCurrentStream(stream)
         }
         catch (error) {
@@ -91,11 +91,22 @@ export class MainAppComponent extends LitElement {
         }
     }
     render() {
+        if (config.noCaptureSupport) {
+            return html`
+                <div>
+                    <header>
+                        <h3>Capturing audio not supported</h3>
+                    </header>
+                </div>
+                <div class="controls">
+                    <p>No capture supported on this browser/device</p>
+                </div>
+            `
+        }
         return html`
             <div>
                 <header>
                     <h3>Select source</h3>
-                    <button @click=${loadSources}>Refresh</button>
                 </header>
                 <div class="list">
                     ${this.devices.map(d => {
@@ -104,6 +115,7 @@ export class MainAppComponent extends LitElement {
                         `
                     })}
                 </div>
+                
                 <div class="controls">
                     ${
                         this.selectedDevice ? 
@@ -117,9 +129,12 @@ export class MainAppComponent extends LitElement {
                         html`<p>Source not selected?</p>`
                         
                     }
-                    <div class="controls">
-                        <button @click=${this.captureScreen}>Capture screen</button>
-                    </div>
+                    ${config.features.getDisplayMedia ? html`
+                        <div class="controls">
+                            <button @click=${this.captureScreen}>Capture screen</button>
+                        </div>
+                    ` : html `<span class="no-support"></span>`}
+                    
                 </div>
             </div>
             
