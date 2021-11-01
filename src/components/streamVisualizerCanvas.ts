@@ -1,11 +1,13 @@
 import {LitElement, html, css} from "lit"
 import {customElement} from "lit/decorators.js"
 //import {query} from "lit/decorators/query.js"
-import { visualize, stopViz, getAudioTrackLabel } from "@app/services/visualizerPoc"
+// import { visualize, stopViz } from "@app/services/visualizerPoc"
+import { visualize, stopViz } from "@app/services/visualizerButterchurn"
+import { getAudioTrackLabel } from "@app/services/visualizerCommon" 
 import { currentStream, setCurrentStream } from "@app/stores/streamStore"
 import { Subscription } from "rxjs"
 
-@customElement('stream-viz-poc')
+@customElement('stream-viz-canvas')
 export class StreamVizPoc extends LitElement {
     sub: Subscription | null = null
     stream: MediaStream | null = null
@@ -23,7 +25,8 @@ export class StreamVizPoc extends LitElement {
             display: flex;
             flex-direction: column;
             background: black;
-            color: white
+            color: white;
+            box-sizing: border-box;            
         }
         
         .canvas-wrapper {
@@ -91,8 +94,6 @@ export class StreamVizPoc extends LitElement {
             // @ts-ignore
             this._errorMsg = error.message
         }
-        
-        this.requestUpdate()
     }
     stop() {
         stopViz()

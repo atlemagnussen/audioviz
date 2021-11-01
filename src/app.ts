@@ -10,7 +10,7 @@ import "@material/mwc-list/mwc-list-item"
 import "@app/styles/vars.css"
 import "@app/styles/theme.css"
 
-import "@app/components/streamVisualizerPoc"
+import "@app/components/streamVisualizerCanvas"
 import "@app/components/deviceSelector"
 import "@app/components/deviceInfo"
 import "@app/components/appInfo"
@@ -68,23 +68,28 @@ export class MainAppComponent extends LitElement {
     
     render() {
         return html`
-            <header>
-                <features-info></features-info>
-                <a href="/">
-                    <h1>Audio Viz</h1>
-                </a>
-                <app-info></app-info>
-            </header>
+            ${
+                this.stream ? html`<header></header>` :
+                html`
+                    <header>
+                        <features-info></features-info>
+                        <a href="/">
+                            <h1>Audio Viz</h1>
+                        </a>
+                        <app-info></app-info>
+                    </header>
+                `
+            }
+            
             <main>
                 ${
                     this.stream ?
-                    html`<stream-viz-poc></stream-viz-poc>` :
+                    html`<stream-viz-canvas></stream-viz-canvas>` :
                     html`<device-selector></device-selector>`
                 }
                 
             </main>
             <footer>
-                fot
             </footer>
         `;
     }

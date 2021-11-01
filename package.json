@@ -37,6 +37,8 @@
     "@material/mwc-button": "^0.25.3",
     "@material/mwc-icon": "^0.25.3",
     "@material/mwc-select": "^0.25.3",
+    "butterchurn": "^2.6.7",
+    "butterchurn-presets": "^2.4.7",
     "lit": "^2.0.2",
     "rxjs": "^7.4.0"
   },
