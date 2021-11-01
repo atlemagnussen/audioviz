@@ -4,10 +4,10 @@
 
 |                       | Windows | MacOS     | Linux  |
 | --------------------- | ------- | --------- | ------ |
-| System audio web      | yes     | no        |        |
+| System audio web      | yes     | no        | no     |
 | System audio electron | yes     | no        |        |
-| Browser tab web       | yes     | yes       |        |
-| Mic web               | yes     | yes       |        |
+| Browser tab web       | yes     | yes       | yes    |
+| Mic web               | yes     | yes       | yes    |
 | Mic electron          | yes     | yes       |        |
 
 Try capturing audio in web using [getUserMedia](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia)
