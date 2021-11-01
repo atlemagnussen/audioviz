@@ -42,6 +42,10 @@ export class MainAppComponent extends LitElement {
             margin-top: 1rem;
             padding: 0.5rem;
             border-radius: 3px;
+            display: flex;
+            flex-direction: column;
+		    justify-content: space-between;
+		    align-items: center;
         }
         .errormsg {
             border-radius: 3px;
@@ -130,7 +134,7 @@ export class MainAppComponent extends LitElement {
                 </header>
                 
                 <div class="controls">
-                    <mwc-button raised icon="mic" label="Capture audio input device" @click=${this.captureDevice}></mwc-button>
+                    
                     <mwc-select @selected=${(e:any) => this.setSelectedDev(e)}>
                         ${this.devices.map(d => {
                             return html`
@@ -144,6 +148,7 @@ export class MainAppComponent extends LitElement {
                             `
                         })}
                     </mwc-select>
+                    <mwc-button raised icon="mic" label="Capture audio input device" @click=${this.captureDevice}></mwc-button>
                 </div>
 
                 ${config.features.getDisplayMedia ? html`

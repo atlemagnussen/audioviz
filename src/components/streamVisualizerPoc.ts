@@ -101,7 +101,7 @@ export class StreamVizPoc extends LitElement {
     render() {
         return html`
             <div class="controls">
-                <button @click=${this.stop}>Stop</button>
+                <mwc-button raised icon="cancel" label="Stop" @click=${this.stop}></mwc-button>
                 <span>Label: ${this._audioTrackLabel}</span>
             </div>
             <div class="canvas-wrapper">
