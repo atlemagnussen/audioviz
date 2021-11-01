@@ -3,7 +3,7 @@ import {customElement, property} from "lit/decorators.js"
 
 
 @customElement('device-info')
-export class MainAppComponent extends LitElement {
+export class DeviceInfo extends LitElement {
     
     static styles = css`
         :host {

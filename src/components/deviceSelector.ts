@@ -6,7 +6,7 @@ import { setCurrentStream } from "@app/stores/streamStore"
 import { Subscription } from "rxjs"
 import config from "@app/config"
 @customElement('device-selector')
-export class MainAppComponent extends LitElement {
+export class DeviceSelector extends LitElement {
     private subs: Subscription[] = []
     private devices: MediaDeviceInfo[] = []
     private selectedDevice: MediaDeviceInfo | null = null

@@ -15,6 +15,7 @@ import "@app/components/deviceSelector"
 import "@app/components/deviceInfo"
 import "@app/components/appInfo"
 import "@app/components/featuresInfo"
+import "@app/components/butterPresetSelector"
 
 import { currentStream } from "@app/stores/streamStore"
 

@@ -1,23 +1,36 @@
 // @ts-ignore
 import butterchurn from "butterchurn"
 // @ts-ignore
-import butterchurnPresets from "butterchurn-presets"
+import { presets, butterPreset } from "@app/stores/settingsStore"
 
 let anim = 0
 let stream: MediaStream | null
+let canvas: HTMLCanvasElement | null
+let visualizer: any|null = null
 
-export const visualize = (str: MediaStream, canvas: HTMLCanvasElement) => {
+
+let presetName = ""
+butterPreset.subscribe(name => {
+    presetName = name
+    if (visualizer) {
+        const preset = presets[presetName]
+        visualizer.loadPreset(preset, 0.0)
+    }
+})
+
+export const visualize = (str: MediaStream, can: HTMLCanvasElement) => {
     if (!str)
         throw new Error("no stream!")
-    if (!canvas)
+    if (!can)
         throw new Error("no canvas!")
 
     stream = str
+    canvas = can
 
     if (anim)
         window.cancelAnimationFrame(anim)
     
-    handleAudioStream(canvas)
+    handleAudioStream()
 }
 
 export const stopViz = () => {
@@ -30,7 +43,17 @@ export const stopViz = () => {
     stream = null
 }
 
-const handleAudioStream = (canvas: HTMLCanvasElement) => {
+export const canvasResized = () => {
+    if (visualizer)
+        visualizer.setRendererSize(canvas?.width, canvas?.height)
+}
+
+export const changePreset = (name: string) => {
+    const preset = presets[name]
+    visualizer.loadPreset(preset, 0.0)
+}
+
+const handleAudioStream = () => {
 
     
     const audioContext = new AudioContext()
@@ -38,25 +61,21 @@ const handleAudioStream = (canvas: HTMLCanvasElement) => {
     const src = audioContext.createMediaStreamSource(stream!)
     const analyzer = audioContext.createAnalyser()
 
-    const visualizer = butterchurn.createVisualizer(audioContext, canvas, {
+    visualizer = butterchurn.createVisualizer(audioContext, canvas, {
         width: 800,
         height: 600
     })
 
     visualizer.connectAudio(src);
-    const presets = butterchurnPresets.getPresets()
-    const preset = presets['Flexi, martin + geiss - dedicated to the sherwin maxawow']
+    
+    const preset = presets[presetName]
 
     visualizer.loadPreset(preset, 0.0)
+    canvasResized()
 
-    visualizer.setRendererSize(canvas.width, canvas.height)
-
-    // render a frame
     const renderFrame = () => {
         anim = requestAnimationFrame(renderFrame)
-
         visualizer.render();
-        
     }
     renderFrame()
 }

@@ -1,19 +1,18 @@
 import {LitElement, html, css} from "lit"
-import {customElement} from "lit/decorators.js"
+import {customElement, property} from "lit/decorators.js"
 //import {query} from "lit/decorators/query.js"
 // import { visualize, stopViz } from "@app/services/visualizerPoc"
-import { visualize, stopViz } from "@app/services/visualizerButterchurn"
+import { visualize, stopViz, canvasResized } from "@app/services/visualizerButterchurn"
 import { getAudioTrackLabel } from "@app/services/visualizerCommon" 
 import { currentStream, setCurrentStream } from "@app/stores/streamStore"
 import { Subscription } from "rxjs"
 
 @customElement('stream-viz-canvas')
-export class StreamVizPoc extends LitElement {
+export class StreamVizCanvas extends LitElement {
     sub: Subscription | null = null
     stream: MediaStream | null = null
     device: MediaDeviceInfo | null = null
     _capturing = false
-    _audioTrackLabel = ""
     _errorMsg = ""
 
     // @query("#canvas-viz")
@@ -43,6 +42,8 @@ export class StreamVizPoc extends LitElement {
         }
     `
     
+    @property({attribute: true})
+    label: string = ""
     
     resizeCanvas() {
         this._canvas = this.renderRoot.querySelector("#canvas-viz")
@@ -57,6 +58,7 @@ export class StreamVizPoc extends LitElement {
         const h = parseInt(styles.getPropertyValue("height"), 10)
         canvas.width = w
         canvas.height = h
+        canvasResized()
         return true
     }
     
@@ -88,7 +90,7 @@ export class StreamVizPoc extends LitElement {
         try {
             this._capturing = true
             await visualize(this.stream!, this._canvas as HTMLCanvasElement)
-            this._audioTrackLabel = getAudioTrackLabel(this.stream!)
+            this.label = getAudioTrackLabel(this.stream!)
         } catch(error) {
             console.error(error)
             // @ts-ignore
@@ -103,7 +105,8 @@ export class StreamVizPoc extends LitElement {
         return html`
             <div class="controls">
                 <mwc-button raised icon="cancel" label="Stop" @click=${this.stop}></mwc-button>
-                <span>Label: ${this._audioTrackLabel}</span>
+                <small>${this.label}</small>
+                <butter-preset-selector></butter-preset-selector>
             </div>
             <div class="canvas-wrapper">
                 <canvas id="canvas-viz" width="100" height="100">

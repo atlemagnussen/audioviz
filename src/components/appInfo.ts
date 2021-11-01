@@ -3,7 +3,7 @@ import {customElement} from "lit/decorators.js"
 import config from "@app/config"
 
 @customElement('app-info')
-export class MainAppComponent extends LitElement {
+export class AppInfo extends LitElement {
     
     static styles = css`
         :host {
