@@ -1,0 +1,31 @@
+export default class TitleText {
+    constructor(gl: any, opts?: {});
+    gl: any;
+    texsizeX: any;
+    texsizeY: any;
+    aspectx: any;
+    aspecty: any;
+    invAspectx: number;
+    invAspecty: number;
+    textTexture: any;
+    indexBuf: any;
+    positionVertexBuf: any;
+    vertexBuf: any;
+    canvas: HTMLCanvasElement;
+    context2D: CanvasRenderingContext2D;
+    floatPrecision: string;
+    generateTitleTexture(text: any): void;
+    fontSize: any;
+    updateGlobals(opts: any): void;
+    buildPositions(): void;
+    vertices: Float32Array;
+    indices: Uint16Array;
+    createShader(): void;
+    shaderProgram: any;
+    positionLocation: any;
+    uvLocation: any;
+    textureLoc: any;
+    textColorLoc: any;
+    generateUvs(progress: any, flip: any, globalVars: any): Float32Array;
+    renderTitle(progress: any, flip: any, globalVars: any): void;
+}

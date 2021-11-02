@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "audio viz",
   "main": "index.js",
+  "typings": "src/types/types",
   "scripts": {
+    "typescript": "tsc --noEmit",
     "build:ts": "tsc",
     "build": "rollup -c",
     "build:vite": "vite build",

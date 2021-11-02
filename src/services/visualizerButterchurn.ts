@@ -1,12 +1,14 @@
-// @ts-ignore
-import butterchurn from "butterchurn"
-// @ts-ignore
+
+
+import butt from "butterchurn"
+
 import { presets, butterPreset } from "@app/stores/settingsStore"
+import type Visualizer from "@app/types/butterchurn/visualizer"
 
 let anim = 0
 let stream: MediaStream | null
 let canvas: HTMLCanvasElement | null
-let visualizer: any|null = null
+let visualizer: Visualizer | null
 
 
 let presetName = ""
@@ -45,12 +47,12 @@ export const stopViz = () => {
 
 export const canvasResized = () => {
     if (visualizer)
-        visualizer.setRendererSize(canvas?.width, canvas?.height)
+        visualizer.setRendererSize(canvas?.width!, canvas?.height!)
 }
 
 export const changePreset = (name: string) => {
     const preset = presets[name]
-    visualizer.loadPreset(preset, 0.0)
+    visualizer?.loadPreset(preset, 0.0)
 }
 
 const handleAudioStream = () => {
@@ -61,21 +63,22 @@ const handleAudioStream = () => {
     const src = audioContext.createMediaStreamSource(stream!)
     const analyzer = audioContext.createAnalyser()
 
-    visualizer = butterchurn.createVisualizer(audioContext, canvas, {
+    
+    visualizer = butt.createVisualizer(audioContext, canvas!, {
         width: 800,
         height: 600
     })
 
-    visualizer.connectAudio(src);
+    visualizer?.connectAudio(src);
     
     const preset = presets[presetName]
 
-    visualizer.loadPreset(preset, 0.0)
+    visualizer?.loadPreset(preset, 0.0)
     canvasResized()
 
     const renderFrame = () => {
         anim = requestAnimationFrame(renderFrame)
-        visualizer.render();
+        visualizer?.render();
     }
     renderFrame()
 }

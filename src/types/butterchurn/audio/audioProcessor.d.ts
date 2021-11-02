@@ -1,0 +1,31 @@
+export default class AudioProcessor {
+    constructor(context: any);
+    numSamps: number;
+    fftSize: number;
+    fft: FFT;
+    audioContext: any;
+    audible: any;
+    analyser: any;
+    analyserL: any;
+    analyserR: any;
+    splitter: any;
+    timeByteArray: Uint8Array;
+    timeByteArrayL: Uint8Array;
+    timeByteArrayR: Uint8Array;
+    timeArray: Int8Array;
+    timeByteArraySignedL: Int8Array;
+    timeByteArraySignedR: Int8Array;
+    tempTimeArrayL: Int8Array;
+    tempTimeArrayR: Int8Array;
+    timeArrayL: Int8Array;
+    timeArrayR: Int8Array;
+    sampleAudio(): void;
+    updateAudio(timeByteArray: any, timeByteArrayL: any, timeByteArrayR: any): void;
+    processAudio(): void;
+    freqArray: Float32Array;
+    freqArrayL: Float32Array;
+    freqArrayR: Float32Array;
+    connectAudio(audionode: any): void;
+    disconnectAudio(audionode: any): void;
+}
+import FFT from "./fft";

@@ -1,0 +1,34 @@
+export default class PresetEquationRunnerWASM {
+    constructor(preset: any, globalVars: any, opts: any);
+    preset: any;
+    texsizeX: any;
+    texsizeY: any;
+    mesh_width: any;
+    mesh_height: any;
+    aspectx: any;
+    aspecty: any;
+    invAspectx: number;
+    invAspecty: number;
+    qs: any;
+    ts: any;
+    regs: any;
+    globalKeys: string[];
+    frameKeys: string[];
+    waveFrameKeys: string[];
+    waveFrameInputKeys: string[];
+    getQVars(pool: any): {};
+    getTVars(pool: any): {};
+    initializeEquations(globalVars: any): void;
+    runVertEQs: boolean;
+    mdVSQInit: {};
+    mdVSQAfterFrame: {};
+    mdVS: any;
+    rand_start: Float32Array;
+    rand_preset: Float32Array;
+    mdVSTWaveInits: any[];
+    mdVSTShapeInits: any[];
+    updatePreset(preset: any, globalVars: any): void;
+    updateGlobals(opts: any): void;
+    runFrameEquations(globalVars: any): {};
+    runWaveFrameEquations(waveIdx: any, globalVars: any): {};
+}

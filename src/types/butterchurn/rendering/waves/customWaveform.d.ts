@@ -1,0 +1,32 @@
+export default class CustomWaveform {
+    constructor(index: any, gl: any, opts: any);
+    index: any;
+    gl: any;
+    pointsData: Float32Array[];
+    positions: Float32Array;
+    colors: Float32Array;
+    smoothedPositions: Float32Array;
+    smoothedColors: Float32Array;
+    texsizeX: any;
+    texsizeY: any;
+    mesh_width: any;
+    mesh_height: any;
+    aspectx: any;
+    aspecty: any;
+    invAspectx: number;
+    invAspecty: number;
+    positionVertexBuf: any;
+    colorVertexBuf: any;
+    floatPrecision: string;
+    updateGlobals(opts: any): void;
+    createShader(): void;
+    shaderProgram: any;
+    aPosLocation: any;
+    aColorLocation: any;
+    sizeLoc: any;
+    thickOffsetLoc: any;
+    generateWaveform(timeArrayL: any, timeArrayR: any, freqArrayL: any, freqArrayR: any, globalVars: any, presetEquationRunner: any, waveEqs: any, alphaMult: any): boolean;
+    samples: any;
+    mdVSWaveFrame: any;
+    drawCustomWaveform(blendProgress: any, timeArrayL: any, timeArrayR: any, freqArrayL: any, freqArrayR: any, globalVars: any, presetEquationRunner: any, waveEqs: any): void;
+}

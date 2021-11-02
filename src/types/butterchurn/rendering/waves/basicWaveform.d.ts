@@ -1,0 +1,33 @@
+export default class BasicWaveform {
+    static processWaveform(timeArray: any, mdVSFrame: any): number[];
+    constructor(gl: any, opts?: {});
+    gl: any;
+    positions: Float32Array;
+    positions2: Float32Array;
+    oldPositions: Float32Array;
+    oldPositions2: Float32Array;
+    smoothedPositions: Float32Array;
+    smoothedPositions2: Float32Array;
+    color: number[];
+    texsizeX: any;
+    texsizeY: any;
+    aspectx: any;
+    aspecty: any;
+    invAspectx: number;
+    invAspecty: number;
+    floatPrecision: string;
+    vertexBuf: any;
+    updateGlobals(opts: any): void;
+    createShader(): void;
+    shaderProgram: any;
+    aPosLoc: any;
+    colorLoc: any;
+    thickOffsetLoc: any;
+    generateWaveform(blending: any, blendProgress: any, timeArrayL: any, timeArrayR: any, mdVSFrame: any): boolean;
+    numVert: number;
+    oldNumVert: number;
+    alpha: any;
+    oldAlpha: any;
+    smoothedNumVert: number;
+    drawBasicWaveform(blending: any, blendProgress: any, timeArrayL: any, timeArrayR: any, mdVSFrame: any): void;
+}
