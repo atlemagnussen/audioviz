@@ -27,7 +27,26 @@ export class StreamVizCanvas extends LitElement {
             color: white;
             box-sizing: border-box;            
         }
-        
+        .controls {
+            position: absolute;
+            z-index: -10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            gap: 0.5rem;
+		    justify-content: center;
+		    align-items: center;
+            animation: fadeout 2s; 
+            animation-fill-mode: forwards; 
+            /* animation-delay: 0; */
+        }
+        .controls.show {
+            animation: fadein 1s;
+            animation-fill-mode: forwards;
+            animation-delay: 0;
+        }
         .canvas-wrapper {
             margin: 0;
             padding: 0;
@@ -39,6 +58,26 @@ export class StreamVizCanvas extends LitElement {
         }
         .errormsg {
             color: red;
+        }
+        @keyframes fadeout {
+            from {
+                z-index: 1;
+                opacity: 1;
+            }
+            to {
+                z-index: -1;
+                opacity: 0;
+            }
+        }
+        @keyframes fadein {
+            from {
+                z-index: -1;
+                opacity: 0;
+            }
+            to {
+                z-index: 1;
+                opacity: 1;
+            }
         }
     `
     
@@ -66,9 +105,15 @@ export class StreamVizCanvas extends LitElement {
         this.resizeCanvas()
         this.startViz()
     }
-    // firstUpdated() {
-        
-    // }
+    toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen()
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen()
+            }
+        }
+    }
     connectedCallback() {
         super.connectedCallback()
         window.addEventListener("resize", () => this.resizeCanvas())
@@ -101,14 +146,22 @@ export class StreamVizCanvas extends LitElement {
         stopViz()
         setCurrentStream(null)
     }
+    showControls() {
+        const controls = this.shadowRoot?.querySelector(".controls")
+        controls?.classList.add("show")
+        setTimeout(() => {
+            controls?.classList.remove("show")
+        }, 5000)
+    }
     render() {
         return html`
             <div class="controls">
-                <mwc-button raised icon="cancel" label="Stop" @click=${this.stop}></mwc-button>
+                <mwc-button raised icon="cancel" title="stop visualization" label="Stop" @click=${this.stop}></mwc-button>
+                <mwc-button raised icon="fullscreen" title="toggle fullscreen" @click=${this.toggleFullscreen}></mwc-button>
                 <small>${this.label}</small>
                 <butter-preset-selector></butter-preset-selector>
             </div>
-            <div class="canvas-wrapper">
+            <div class="canvas-wrapper" @click=${() => this.showControls()}>
                 <canvas id="canvas-viz" width="100" height="100">
                     browser support?
                 </canvas>
