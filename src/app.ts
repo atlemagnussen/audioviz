@@ -10,8 +10,9 @@ import "@material/mwc-list/mwc-list-item"
 import "@app/styles/vars.css"
 import "@app/styles/theme.css"
 
-import "@app/components/streamVisualizerCanvas"
-import "@app/components/deviceSelector"
+import "@app/views/streamVisualizerCanvas"
+import "@app/views/deviceSelector"
+
 import "@app/components/deviceInfo"
 import "@app/components/appInfo"
 import "@app/components/featuresInfo"
