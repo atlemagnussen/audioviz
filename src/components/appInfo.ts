@@ -34,7 +34,7 @@ export class AppInfo extends LitElement {
             `
         else
             return html`
-                <div>&nbsp;&nbsp;&nbsp;</div>
+                <div></div>
             `
     }
 }

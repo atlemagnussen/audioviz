@@ -46,6 +46,12 @@ export class DeviceSelector extends LitElement {
             flex-direction: column;
 		    justify-content: space-between;
 		    align-items: center;
+            color: var(--av-secondary-foreground);
+        }
+        
+        a {
+            color: var(--av-secondary-foreground);
+            text-decoration: none;
         }
         .errormsg {
             border-radius: 3px;
@@ -154,10 +160,17 @@ export class DeviceSelector extends LitElement {
                 ${config.features.getDisplayMedia ? html`
                         <div class="controls">
                             <mwc-button raised icon="desktop_windows" label="Capture screen or tab" @click=${this.captureScreen}></mwc-button>
+                            <small>select "share audio" when capturing</small>
                         </div>
                     ` : html `<span class="no-support"></span>`}
                 
                 <div class="errormsg">${this._errorMsg}</div>
+                <div class="controls links">
+                    <a href="https://github.com/atlemagnussen/audioviz">
+                        <img src="https://github.githubassets.com/images/modules/site/icons/footer/github-mark.svg" width="20" height="20" class="d-block" loading="lazy" decoding="async" alt="GitHub mark">
+                        <span>source code</span>
+                    </a>
+                </div>
             </div>
             
         `

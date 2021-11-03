@@ -21,8 +21,8 @@ export class FeaturesInfo extends LitElement {
 
     render() {
         
-        return html`
-            <div class="small">
+        return html`<span></span>
+            <!-- <div class="small">
                 platform: ${config.platform}
             </div>
             <div class="small">
@@ -30,7 +30,7 @@ export class FeaturesInfo extends LitElement {
             </div>
             <div class="small">
                 displayMedia: ${config.features.getDisplayMedia}
-            </div>
+            </div> -->
         `
     
     }
