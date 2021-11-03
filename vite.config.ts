@@ -14,6 +14,7 @@ export default defineConfig({
         }
     },
     build: {
-        outDir: buildOutput
+        outDir: buildOutput,
+        sourcemap: true
     }
 })

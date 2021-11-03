@@ -25,7 +25,7 @@ export class StreamVizCanvas extends LitElement {
             flex-direction: column;
             background: black;
             color: white;
-            box-sizing: border-box;            
+            box-sizing: border-box;
         }
         .controls {
             position: absolute;
@@ -51,7 +51,7 @@ export class StreamVizCanvas extends LitElement {
             margin: 0;
             padding: 0;
             flex: 1 1 auto;
-            background: yellow;
+            box-sizing: border-box;
         }
         canvas {
             background-color: grey;
@@ -90,13 +90,17 @@ export class StreamVizCanvas extends LitElement {
             console.log("no canvas")
             return false
         }
+        window.innerWidth
         const canvas = this._canvas as HTMLCanvasElement
-        const parent = canvas.parentNode
-        const styles = getComputedStyle(parent as Element)
-        const w = parseInt(styles.getPropertyValue("width"), 10)
-        const h = parseInt(styles.getPropertyValue("height"), 10)
-        canvas.width = w
-        canvas.height = h
+        // const parent = canvas.parentNode
+        // const styles = getComputedStyle(parent as Element)
+        // const w = parseInt(styles.getPropertyValue("width"), 10)
+        // const h = parseInt(styles.getPropertyValue("height"), 10)
+        const w = window.innerWidth
+        const h = window.innerHeight
+        console.log(`Resize event width=${w}, height=${h}`)
+        canvas.width = w-6
+        canvas.height = h-10
         canvasResized()
         return true
     }
