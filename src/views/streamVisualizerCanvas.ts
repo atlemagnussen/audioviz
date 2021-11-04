@@ -54,6 +54,7 @@ export class StreamVizCanvas extends LitElement {
             box-sizing: border-box;
         }
         canvas {
+            display:block;
             background-color: grey;
         }
         .errormsg {
@@ -99,8 +100,8 @@ export class StreamVizCanvas extends LitElement {
         const w = window.innerWidth
         const h = window.innerHeight
         console.log(`Resize event width=${w}, height=${h}`)
-        canvas.width = w-6
-        canvas.height = h-10
+        canvas.width = w
+        canvas.height = h
         canvasResized()
         return true
     }

@@ -9,6 +9,7 @@ import "@material/mwc-list/mwc-list-item"
 
 import "@app/styles/vars.css"
 import "@app/styles/theme.css"
+import "@app/styles/site.css"
 
 import "@app/views/streamVisualizerCanvas"
 import "@app/views/deviceSelector"
@@ -26,8 +27,6 @@ export class MainAppComponent extends LitElement {
     private stream: MediaStream | null = null
     static styles = css`
         :host {
-		    padding: 0;
-		    margin: 0 auto;
 		    display: grid;
 		    grid-template-rows: auto 1fr auto;
 		    box-sizing: border-box;
@@ -45,7 +44,6 @@ export class MainAppComponent extends LitElement {
 	    }
         main {
             background: var(--av-main-background);
-            padding: 0.2rem;
         }
 	    footer {
 		    display: flex;
