@@ -155,12 +155,13 @@ export class DeviceSelector extends LitElement {
                         })}
                     </mwc-select>
                     <mwc-button raised icon="mic" label="Capture audio input device" @click=${this.captureDevice}></mwc-button>
+                    <small>this usually means your microphone</small>
                 </div>
 
                 ${config.features.getDisplayMedia ? html`
                         <div class="controls">
                             <mwc-button raised icon="desktop_windows" label="Capture screen or tab" @click=${this.captureScreen}></mwc-button>
-                            <small>select "share audio" when capturing</small>
+                            <small>only select option where audio sharing is possible</small>
                         </div>
                     ` : html `<span class="no-support"></span>`}
                 
