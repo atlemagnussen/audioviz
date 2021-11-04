@@ -45,9 +45,9 @@ export const stopViz = () => {
     stream = null
 }
 
-export const canvasResized = () => {
+export const canvasResized = (width: number, height: number) => {
     if (visualizer)
-        visualizer.setRendererSize(canvas?.width!, canvas?.height!)
+        visualizer.setRendererSize(width, height)
 }
 
 export const changePreset = (name: string) => {
@@ -57,13 +57,11 @@ export const changePreset = (name: string) => {
 
 const handleAudioStream = () => {
 
-    
     const audioContext = new AudioContext()
 
     const src = audioContext.createMediaStreamSource(stream!)
     const analyzer = audioContext.createAnalyser()
 
-    
     visualizer = butt.createVisualizer(audioContext, canvas!, {
         width: 800,
         height: 600
@@ -74,7 +72,7 @@ const handleAudioStream = () => {
     const preset = presets[presetName]
 
     visualizer?.loadPreset(preset, 0.0)
-    canvasResized()
+    canvasResized(canvas?.width!, canvas?.height!)
 
     const renderFrame = () => {
         anim = requestAnimationFrame(renderFrame)

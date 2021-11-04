@@ -55,6 +55,8 @@ export class StreamVizCanvas extends LitElement {
         }
         canvas {
             display:block;
+            height: 100%;
+            width: 100%;
             background-color: grey;
         }
         .errormsg {
@@ -102,7 +104,7 @@ export class StreamVizCanvas extends LitElement {
         console.log(`Resize event width=${w}, height=${h}`)
         canvas.width = w
         canvas.height = h
-        canvasResized()
+        canvasResized(w, h)
         return true
     }
     
@@ -167,7 +169,7 @@ export class StreamVizCanvas extends LitElement {
                 <butter-preset-selector></butter-preset-selector>
             </div>
             <div class="canvas-wrapper" @click=${() => this.showControls()}>
-                <canvas id="canvas-viz" width="100" height="100">
+                <canvas id="canvas-viz">
                     browser support?
                 </canvas>
             </div>
