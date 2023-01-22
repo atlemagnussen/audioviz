@@ -43,25 +43,23 @@ export const captureScreenElectron = async () => {
 }
 
 export const captureSoureElectron = async (source: DesktopCapturerSource) => {
-    const gdmOptions = {
+    const constraints = {
         audio: {
-            mandatory: {
-                chromeMediaSource: 'desktop',
-                chromeMediaSourceId: source.id
-            }
+          mandatory: {
+            chromeMediaSource: 'desktop'
+          }
         },
         video: {
-            mandatory: {
-              chromeMediaSource: 'desktop',
-              chromeMediaSourceId: source.id
-            }
+          mandatory: {
+            chromeMediaSource: 'desktop'
           }
-    }
+        }
+      }
 
     const supported = navigator.mediaDevices.getSupportedConstraints()
     console.log("supported", supported)
 
     // @ts-ignore
-    const stream = await navigator.mediaDevices.getDisplayMedia(gdmOptions)
+    const stream = await navigator.mediaDevices.getUserMedia(constraints)
     return stream
 }

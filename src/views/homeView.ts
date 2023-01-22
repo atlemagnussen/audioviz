@@ -41,18 +41,18 @@ export class HomeView extends LitElement {
         
     `
     render() {
-        if (config.noCaptureSupport) {
-            return html`
-                <div>
-                    <header>
-                        <h3>Capturing audio not supported</h3>
-                    </header>
-                </div>
-                <div class="controls">
-                    <p>No capture supported on this browser/device</p>
-                </div>
-            `
-        }
+        // if (config.noCaptureSupport) {
+        //     return html`
+        //         <div>
+        //             <header>
+        //                 <h3>Capturing audio not supported</h3>
+        //             </header>
+        //         </div>
+        //         <div class="controls">
+        //             <p>No capture supported on this browser/device</p>
+        //         </div>
+        //     `
+        // }
         return html`
             <div>
                 

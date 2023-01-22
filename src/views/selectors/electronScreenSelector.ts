@@ -56,8 +56,9 @@ export class ElectronScreenSelector extends LitElement {
             const stream = await captureSoureElectron(this.selectedSource!)
             console.log("stream", stream)
         }
-        catch (e: any) {
-            this._errorMsg = e.message
+        catch (err: any) {
+            console.error(err)
+            this._errorMsg = err.message
         }
     }
 
