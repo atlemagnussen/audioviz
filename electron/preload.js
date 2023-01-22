@@ -1,10 +1,12 @@
 const { ipcRenderer, contextBridge } = require("electron")
 
+let sources = []
 
-ipcRenderer.on('SET_SOURCES', async (event, sources) => {
+ipcRenderer.on('SET_SOURCES', async (event, src) => {
     try {
+        sources = src
         console.log("SET_SOURCES", sources)
-        contextBridge.exposeInMainWorld("ELECTRON_SOURCES", sources)
+        
         // gets all devices here
         const devices = await navigator.mediaDevices.enumerateDevices()
         devices.map(d => {
@@ -41,6 +43,16 @@ for (const type of ['chrome', 'node', 'electron']) {
 }
 
 contextBridge.exposeInMainWorld("ELECTRON_ENV", electronEnv)
+
+function getSources() {
+    return sources
+}
+
+contextBridge.exposeInMainWorld(
+    "electron",
+    {
+        getSources: () => getSources() 
+    })
 
 // let sources = []
 // window.addEventListener("DOMContentLoaded", () => {

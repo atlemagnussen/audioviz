@@ -68,6 +68,7 @@ export class DeviceSelector extends LitElement {
                     
                     <audio-input-selector></audio-input-selector>
                     <display-media-selector></display-media-selector>
+                    <electron-screen-selector></electron-screen-selector>
                 </div>
 
                 

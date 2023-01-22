@@ -15,6 +15,7 @@ import "@app/views/streamVisualizerCanvas"
 import "@app/views/deviceSelector"
 import "@app/views/selectors/audioInputSelector"
 import "@app/views/selectors/displayMediaSelector"
+import "@app/views/selectors/electronScreenSelector"
 
 import "@app/views/homeView"
 
