@@ -13,6 +13,10 @@ import "@app/styles/site.css"
 
 import "@app/views/streamVisualizerCanvas"
 import "@app/views/deviceSelector"
+import "@app/views/selectors/audioInputSelector"
+import "@app/views/selectors/displayMediaSelector"
+
+import "@app/views/homeView"
 
 import "@app/components/deviceInfo"
 import "@app/components/appInfo"
@@ -85,7 +89,7 @@ export class MainAppComponent extends LitElement {
                 ${
                     this.stream ?
                     html`<stream-viz-canvas></stream-viz-canvas>` :
-                    html`<device-selector></device-selector>`
+                    html`<home-view></home-view>`
                 }
                 
             </main>

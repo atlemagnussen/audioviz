@@ -15,7 +15,7 @@ export const captureScreen = async () => {
 }
 
 const captureDeviceWeb = async (device: MediaDeviceInfo) => {
-    const gdmOptions: DisplayMediaStreamConstraints = {
+    const gdmOptions: MediaStreamConstraints = {
         audio: {
             // deviceId: {
             //     exact: device.deviceId
@@ -30,7 +30,7 @@ const captureDeviceWeb = async (device: MediaDeviceInfo) => {
 }
 
 const captureScreenWeb = async () => {
-    const gdmOptions: DisplayMediaStreamConstraints = {
+    const gdmOptions: MediaStreamConstraints = {
         video: true,
         audio: {
             echoCancellation: true,

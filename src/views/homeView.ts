@@ -1,10 +1,11 @@
 import {LitElement, html, css} from "lit"
 import {customElement} from "lit/decorators.js"
 
-@customElement('device-selector')
-export class DeviceSelector extends LitElement {
+import config from "@app/config"
+
+@customElement('home-view')
+export class HomeView extends LitElement {
     
-    private _errorMsg: string | null = null
 
     static styles = css`
         :host {
@@ -32,47 +33,37 @@ export class DeviceSelector extends LitElement {
 		    justify-content: space-between;
 		    align-items: center;
             color: var(--av-secondary-foreground);
-            gap: 2rem;
         }
-        
         a {
             color: var(--av-secondary-foreground);
             text-decoration: none;
         }
-        .errormsg {
-            border-radius: 3px;
-            color: var(--mdc-theme-error);
-            padding: 0.5rem;
-        }
         
     `
-
-    errorHandler(error:any) {
-        console.log(error)
-        // @ts-ignore
-        if (error.message) this._errorMsg = error.message
-        // @ts-ignore
-        if (error.name) this._errorMsg = `${this._errorMsg} ${error.name}`
-        this.requestUpdate()
-    }
-    
     render() {
-        
+        if (config.noCaptureSupport) {
+            return html`
+                <div>
+                    <header>
+                        <h3>Capturing audio not supported</h3>
+                    </header>
+                </div>
+                <div class="controls">
+                    <p>No capture supported on this browser/device</p>
+                </div>
+            `
+        }
         return html`
             <div>
-                <header>
-                    <h3>Select source</h3>
-                </header>
                 
-                <div class="controls">
-                    
-                    <audio-input-selector></audio-input-selector>
-                    <display-media-selector></display-media-selector>
+                <device-selector></device-selector>
+                
+                <div class="controls links">
+                    <a href="https://github.com/atlemagnussen/audioviz">
+                        <img src="https://github.githubassets.com/images/modules/site/icons/footer/github-mark.svg" width="20" height="20" class="d-block" loading="lazy" decoding="async" alt="GitHub mark">
+                        <span>source code</span>
+                    </a>
                 </div>
-
-                
-                <div class="errormsg">${this._errorMsg}</div>
-                
             </div>
             
         `

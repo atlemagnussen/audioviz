@@ -25,11 +25,16 @@ function createWindow() {
     const consent = systemPreferences.getMediaAccessStatus("screen")
     console.log(consent)
     console.log("try get sources")
+
+
     desktopCapturer.getSources({ types: ['window', 'screen'] }).then(sources => {
-        for (const source of sources) {
-            console.log(source)
-        }
+        mainWindow.webContents.send('SET_SOURCES', sources)
+        // for (const source of sources) {
+        //     console.log("main.js", source)
+        // }
     })
+
+    
 }
 
 app.whenReady().then(() => {

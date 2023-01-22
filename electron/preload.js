@@ -1,7 +1,38 @@
-const { contextBridge } = require("electron")
-const { desktopCapturer } = require("electron")
-// All of the Node.js APIs are available in the preload process.
-// It has the same sandbox as a Chrome extension.
+const { ipcRenderer, contextBridge } = require("electron")
+
+
+ipcRenderer.on('SET_SOURCES', async (event, sources) => {
+    try {
+        console.log("SET_SOURCES", sources)
+        contextBridge.exposeInMainWorld("ELECTRON_SOURCES", sources)
+        // gets all devices here
+        const devices = await navigator.mediaDevices.enumerateDevices()
+        devices.map(d => {
+            console.log("preload media devices", d)
+        })
+
+        //const stream = await navigator.mediaDevices.getUserMedia({
+        //    audio: true,
+            // video: {
+            //     mandatory: {
+            //         chromeMediaSource: 'desktop',
+            //         chromeMediaSourceId: sourceId,
+            //         minWidth: 1280,
+            //         maxWidth: 1280,
+            //         minHeight: 720,
+            //         maxHeight: 720
+            //     }
+            // }
+        //})
+        //handleStream(stream)
+    } catch (e) {
+        handleError(e)
+    }
+})
+
+function handleError(e) {
+    console.log(e)
+}
 
 const electronEnv = { platform: process.platform }
 for (const type of ['chrome', 'node', 'electron']) {
@@ -11,15 +42,15 @@ for (const type of ['chrome', 'node', 'electron']) {
 
 contextBridge.exposeInMainWorld("ELECTRON_ENV", electronEnv)
 
-let sources = []
-window.addEventListener("DOMContentLoaded", () => {
-    desktopCapturer.getSources({ types: ['window', 'screen'] }).then(ss => {
-        for(const source of ss) {
-            sources.push(source)
-            console.log(source)
-        }
-        contextBridge.exposeInMainWorld("ELECTRON_SOURCES", sources)
-        const event = new CustomEvent('electron-sources-ready', { detail: sources })
-        document.dispatchEvent(event)
-    })
-})
+// let sources = []
+// window.addEventListener("DOMContentLoaded", () => {
+//     desktopCapturer.getSources({ types: ['window', 'screen'] }).then(ss => {
+//         for(const source of ss) {
+//             sources.push(source)
+//             console.log(source)
+//         }
+//         contextBridge.exposeInMainWorld("ELECTRON_SOURCES", sources)
+//         const event = new CustomEvent('electron-sources-ready', { detail: sources })
+//         document.dispatchEvent(event)
+//     })
+// })
