@@ -1,6 +1,6 @@
 
 import config from "@app/config"
-import { captureScreenElectron, captureDeviceElectron } from "./captureElectron"
+import { captureEntireDesktopElectron, captureDeviceElectron } from "./captureElectron"
 
 export const captureDevice = async (device: MediaDeviceInfo) => {
     if (config.isElectron)
@@ -10,7 +10,7 @@ export const captureDevice = async (device: MediaDeviceInfo) => {
 
 export const captureScreen = async () => {
     if (config.isElectron)
-        return captureScreenElectron()
+        return captureEntireDesktopElectron()
     return captureScreenWeb()
 }
 

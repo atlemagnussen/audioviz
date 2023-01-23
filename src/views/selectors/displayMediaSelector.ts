@@ -28,7 +28,7 @@ export class DisplayMediaSelector extends LitElement {
         }
     `
     
-    async captureScreen() {
+    async capture() {
         try {
             const stream = await captureScreen()
             setCurrentStream(stream)
@@ -50,7 +50,7 @@ export class DisplayMediaSelector extends LitElement {
         
         if (config.features.getDisplayMedia) {
             return html`
-                <mwc-button raised icon="desktop_windows" label="Capture screen or tab" @click=${this.captureScreen}></mwc-button>
+                <mwc-button raised icon="desktop_windows" label="Capture screen or tab" @click=${this.capture}></mwc-button>
                 <small>only select option where audio sharing is possible</small>
             `
         }

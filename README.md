@@ -18,7 +18,9 @@ and visualize it with [butterchurn](https://github.com/jberg/butterchurn)
 
 About capturing media
 
-ttps://developers.google.com/web/updates/2015/10/media-devices
+https://www.electronjs.org/docs/latest/api/desktop-capturer
+
+https://developers.google.com/web/updates/2015/10/media-devices
 
 https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder
 

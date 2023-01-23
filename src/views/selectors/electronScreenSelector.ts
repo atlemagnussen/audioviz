@@ -2,7 +2,7 @@ import {LitElement, html, css} from "lit"
 import {customElement, state} from "lit/decorators.js"
 import config from "@app/config"
 
-import { getSourcesElectron, captureSoureElectron } from "@app/services/captureElectron"
+import { getSourcesElectron, captureSourceElectron } from "@app/services/captureElectron"
 import { DesktopCapturerSource } from "electron"
 
 @customElement('electron-screen-selector')
@@ -42,7 +42,7 @@ export class ElectronScreenSelector extends LitElement {
     }
 
     getSources() {
-        this.sources = getSourcesElectron()
+        // this.sources = getSourcesElectron()
         console.log("sources", this.sources)
     }
     setSelectedDev(source: DesktopCapturerSource) {
@@ -53,7 +53,7 @@ export class ElectronScreenSelector extends LitElement {
             this._errorMsg = "select source first!"
         
         try {
-            const stream = await captureSoureElectron(this.selectedSource!)
+            const stream = await captureSourceElectron(this.selectedSource!)
             console.log("stream", stream)
         }
         catch (err: any) {

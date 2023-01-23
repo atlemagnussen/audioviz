@@ -14,6 +14,9 @@ export class ButterPresetSelector extends LitElement {
 	    .small {
             font-size: x-small;
         }
+        mwc-select {
+            width: 500px;
+        }
     `
 
     setSelectedPreset(e: CustomEvent) {

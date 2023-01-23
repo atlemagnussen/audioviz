@@ -1,15 +1,26 @@
 import {LitElement, html, css} from "lit"
-import {customElement, property} from "lit/decorators.js"
-//import {query} from "lit/decorators/query.js"
-// import { visualize, stopViz } from "@app/services/visualizerPoc"
+import {customElement, property, state} from "lit/decorators.js"
+import {classMap} from "lit/directives/class-map.js"
+
 import { visualize, stopViz, canvasResized } from "@app/services/visualizerButterchurn"
 import { getAudioTrackLabel } from "@app/services/visualizerCommon" 
 import { currentStream, setCurrentStream } from "@app/stores/streamStore"
-import { Subscription } from "rxjs"
+import { debounceTime, fromEvent, merge, Observable, Subscription } from "rxjs"
 
 @customElement('stream-viz-canvas')
 export class StreamVizCanvas extends LitElement {
-    sub: Subscription | null = null
+
+    events = ["click", "mousemove", "wheel", "scroll", "touchmove", "keydown"]
+    eventObs: Observable<Event>[] = []
+
+    combo: Observable<Event> | null = null
+    result: Observable<Event> | null = null
+
+    subs: Subscription[] = []
+    
+    @state()
+    showControls = false
+    
     stream: MediaStream | null = null
     device: MediaDeviceInfo | null = null
     _capturing = false
@@ -93,12 +104,8 @@ export class StreamVizCanvas extends LitElement {
             console.log("no canvas")
             return false
         }
-        window.innerWidth
+        
         const canvas = this._canvas as HTMLCanvasElement
-        // const parent = canvas.parentNode
-        // const styles = getComputedStyle(parent as Element)
-        // const w = parseInt(styles.getPropertyValue("width"), 10)
-        // const h = parseInt(styles.getPropertyValue("height"), 10)
         const w = window.innerWidth
         const h = window.innerHeight
         console.log(`Resize event width=${w}, height=${h}`)
@@ -124,14 +131,33 @@ export class StreamVizCanvas extends LitElement {
     connectedCallback() {
         super.connectedCallback()
         window.addEventListener("resize", () => this.resizeCanvas())
-        this.sub = currentStream.subscribe(str => {
-            this.stream = str
+        const sub = currentStream.subscribe(str => this.stream = str )
+        this.subs.push(sub)
+
+        this.eventObs = this.events.map(e => {
+            const obs = fromEvent(this, e)
+            return obs
         })
+
+        // movement events to show controls
+        this.combo = merge(...this.eventObs)
+        const subCombo = this.combo.subscribe(x => {
+            this.showControls = true
+            console.log("start of debouce", x)
+        })
+        this.subs.push(subCombo)
+
+        this.result = this.combo.pipe(debounceTime(1000))
+        const subRes = this.result.subscribe(x => {
+            this.showControls = false
+            console.log("end of debouce", x)
+        })
+        this.subs.push(subRes)
     }
     disconnectedCallback() {
         window.removeEventListener("resize", () => this.resizeCanvas())
         super.disconnectedCallback()
-        this.sub?.unsubscribe()
+        this.subs.map(s => s.unsubscribe())
     }
     async startViz() {
         if (!this.stream)
@@ -153,22 +179,21 @@ export class StreamVizCanvas extends LitElement {
         stopViz()
         setCurrentStream(null)
     }
-    showControls() {
-        const controls = this.shadowRoot?.querySelector(".controls")
-        controls?.classList.add("show")
-        setTimeout(() => {
-            controls?.classList.remove("show")
-        }, 5000)
-    }
+    
     render() {
+        const classControls = {
+            controls: true,
+            show: this.showControls
+        }
+
         return html`
-            <div class="controls">
+            <div class=${classMap(classControls)}>
                 <mwc-button raised icon="cancel" title="stop visualization" label="Stop" @click=${this.stop}></mwc-button>
                 <mwc-button raised icon="fullscreen" title="toggle fullscreen" @click=${this.toggleFullscreen}></mwc-button>
                 <small>${this.label}</small>
                 <butter-preset-selector></butter-preset-selector>
             </div>
-            <div class="canvas-wrapper" @click=${() => this.showControls()}>
+            <div class="canvas-wrapper">
                 <canvas id="canvas-viz">
                     browser support?
                 </canvas>

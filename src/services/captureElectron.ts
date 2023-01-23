@@ -1,14 +1,15 @@
 import { DesktopCapturerSource } from "electron"
 
-let sources: DesktopCapturerSource[]
-
-
+let sources: DesktopCapturerSource[] = []
 
 export const getSourcesElectron = (): DesktopCapturerSource[] => {
     console.log("sources before", sources)
-    ///@ts-ignore
-    sources = window.electron.getSources()
-    console.log("sources after", sources)
+    try {
+        ///@ts-ignore
+        sources = window.electron.getSources()
+        console.log("sources after", sources)
+    }
+    catch(err) {}
         
     return sources
 }
@@ -42,7 +43,7 @@ export const captureScreenElectron = async () => {
     return stream
 }
 
-export const captureSoureElectron = async (source: DesktopCapturerSource) => {
+export const captureEntireDesktopElectron = async () => {
     const constraints = {
         audio: {
           mandatory: {
@@ -61,5 +62,29 @@ export const captureSoureElectron = async (source: DesktopCapturerSource) => {
 
     // @ts-ignore
     const stream = await navigator.mediaDevices.getUserMedia(constraints)
+    return stream
+}
+
+export const captureSourceElectron = async (source: DesktopCapturerSource) => {
+    const gdmOptions = {
+        audio: {
+            mandatory: {
+                chromeMediaSource: 'desktop',
+                chromeMediaSourceId: source.id
+            }
+        },
+        video: {
+            mandatory: {
+              chromeMediaSource: 'desktop',
+              chromeMediaSourceId: source.id
+            }
+          }
+    }
+
+    const supported = navigator.mediaDevices.getSupportedConstraints()
+    console.log("supported", supported)
+
+    // @ts-ignore
+    const stream = await navigator.mediaDevices.getDisplayMedia(gdmOptions)
     return stream
 }
